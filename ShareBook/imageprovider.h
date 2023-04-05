@@ -1,0 +1,29 @@
+#ifndef IMAGEPROVIDER_H
+#define IMAGEPROVIDER_H
+
+#include <QQuickImageProvider>
+
+class ImageProvider : public QQuickImageProvider
+{
+    Q_OBJECT
+public:
+    ImageProvider();
+    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) override;
+
+    void setAvatar(const QPixmap &newPixmap);
+    void setHashPixmaps(const QHash<QString,QPixmap> &newPixmaps);
+    void setInterestHashPixmaps(const QHash<QString,QPixmap> &newPixmaps);
+    void setFanHashPixmaps(const QHash<QString,QPixmap> &newPixmaps);
+    void setpushUIAvatars(const QHash<QString,QPixmap> &newPixmaps);
+    void setpushUIPics(const QHash<QString,QPixmap> &newPixmaps);
+private:
+    QPixmap m_avatar;
+    QVector<QPixmap> m_pixmaps;
+    QHash<QString,QPixmap> m_firstPics;
+    QHash<QString,QPixmap> m_interestAvatars;
+    QHash<QString,QPixmap> m_fanAvatars;
+    QHash<QString,QPixmap> m_pushUIAvatars;
+    QHash<QString,QPixmap> m_pushUIPics;
+};
+
+#endif // IMAGEPROVIDER_H
