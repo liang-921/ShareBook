@@ -14,48 +14,54 @@ Item {
 
     property var jottingInfo
 
-    property var temp: jottingInfo.commend
+    property var temp: jottingInfo.comment
 
-    Button{
-        id:backButton
-        icon.source: "qrc:/images/images/backbutton.png"
-        icon.width: rootWidth*0.1
-        icon.height: rootWidth*0.1
-        width: icon.width
-        height: icon.height
-        anchors.top: parent.top
+
+    Rectangle{
+        id:netizen_info
+        width:rootWidth
+        height:rootWidth*0.12
         anchors.left: parent.left
-        anchors.margins: rootWidth*0.02
-        flat: true
-        icon.color: "transparent"
-        onClicked: {
-            if(type=="preview"){
-                loader.setSource(publishPage_loader,{"materialData":jottingInfo.picPath,"content_property":jottingInfo.content})
-            }else if(type=="push"){
-                loader.source=pushPage_loader
-            }else if(type=="self"){
-                loader.source=personalPage_loader
+
+        anchors.top: parent.top
+        anchors.topMargin: rootWidth*0.02
+
+        Button{
+            id:backButton
+            width: rootWidth*0.08
+            height: rootWidth*0.08
+            anchors.left: parent.left
+            anchors.leftMargin: rootWidth*0.02
+            anchors.verticalCenter: parent.verticalCenter
+            Image {
+                id: backImg
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                sourceSize: Qt.size(30, 30)
+                source:"qrc:/images/images/backbutton.png"
+            }
+
+            flat: true
+            icon.color: "transparent"
+            onClicked: {
+                if(type=="preview"){
+                    loader.setSource(publishPage_loader,{"materialData":jottingInfo.picPath,"content_property":jottingInfo.content})
+                }else if(type=="push"){
+                    loader.source=pushPage_loader
+                }else if(type=="self"){
+                    loader.source=personalPage_loader
+                }
             }
         }
-    }
 
-    Row{
-        id:netizen_info
-        anchors.left: backButton.right
-        anchors.leftMargin: rootWidth*0.03
-        spacing: rootWidth*0.05
-//        Image{
-//            id:head_pic
-//            fillMode: Image.PreserveAspectFit
-//            source: jottingInfo.avatar
-//            width: rootWidth*0.15
-//            height: rootWidth*0.15
-//            anchors.verticalCenter: parent.verticalCenter
-//        }
 
         Rectangle{
+            id:recImg
             width: rootWidth*0.1
             height: rootWidth*0.1
+            anchors.left: backButton.right
+            anchors.leftMargin:  rootWidth*0.02
+             anchors.verticalCenter: parent.verticalCenter
             Image {
                 id: head_image
                 smooth: true
@@ -87,43 +93,60 @@ Item {
         }
 
 
-
         Text{
             id:netizen_name
             text: qsTr(jottingInfo.netizenName)
+            anchors.left: recImg.right
+            anchors.leftMargin: rootWidth*0.03
             anchors.verticalCenter: parent.verticalCenter
         }
-        Row{
-            id:funtions
-            spacing: rootWidth*0.05
-            leftPadding:rootWidth*0.2
+//        Item{
+//            width: rootWidth*0.15
+//            height: concern_button_text.height
+//        }
+
+
+        Button{
+            id: concern_button
+            anchors.left: netizen_name.right
+            anchors.leftMargin:  rootWidth*0.35
+            width: rootWidth*0.15
+            height: rootWidth*0.08
             anchors.verticalCenter: parent.verticalCenter
-            Rectangle{
-                id: concern_button
-                width: rootWidth*0.15
-                height: concern_button_text.height
-                anchors.verticalCenter: parent.verticalCenter
+            background: Rectangle{
+                anchors.fill: parent
+                color:"transparent"
+                border.color: "grey"
                 border.width: 1
-                border.color: "black"
                 radius: 5
-                Text{
-                    id:concern_button_text
-                    text: qsTr("关注")
-                    color: "black"
-                    anchors.centerIn: parent
-                }
             }
-            Button{
-                id: share_jotting_button
-                icon.source: "qrc:/images/images/transit.png"
-                icon.width: rootWidth*0.1
-                icon.height: rootWidth*0.1
-                width: icon.width
-                height: icon.height
-                flat: true
-                icon.color: "transparent"
-                anchors.verticalCenter: parent.verticalCenter
+
+            Text{
+                id:concern_button_text
+                text: qsTr("关注")
+                color: "black"
+                anchors.centerIn: parent
             }
+        }
+
+        Button{
+            id: share_jotting_button
+            width: rootWidth*0.08
+            height: rootWidth*0.08/*
+            anchors.left: concern_button.right
+            anchors.leftMargin: rootWidth*0.15*/
+            anchors.right: parent.right
+            anchors.rightMargin: rootWidth*0.03
+            Image {
+                id: setImg
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                sourceSize: Qt.size(25, 25)
+                source:"qrc:/images/images/transit.png"
+            }
+            flat: true
+            icon.color: "transparent"
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 
@@ -139,10 +162,11 @@ Item {
     ScrollView{
         id:jotting_content
         anchors.top: seperator_line_1.bottom
+        anchors.topMargin: rootWidth*0.01
         anchors.bottom: mark_banner.top
         width: rootWidth
         contentWidth:rootWidth
-        contentHeight:image_area.height+indicator.height+content.height+time.height+commend_count.height+rootHeight*0.2+commendListView.contentHeight
+        contentHeight:image_area.height+indicator.height+content.height+time.height+comment_count.height+rootHeight*0.2+commentListView.contentHeight
         SwipeView{
             id:image_area
             width: rootWidth
@@ -200,7 +224,7 @@ Item {
         }
 
         Text{
-            id:commend_count
+            id:comment_count
             anchors.top: seperator_line_2.bottom
             anchors.left: parent.left
             anchors.margins: rootWidth*0.02
@@ -210,54 +234,54 @@ Item {
         }
 
         Component{
-            id:commend
+            id:comment
             Rectangle{
                 width:rootWidth
                 Image{
-                    id:commend_pic
+                    id:comment_pic
                     fillMode: Image.PreserveAspectFit
-                    source: jottingInfo.commend[index].pic
+                    source: jottingInfo.comment[index].pic
                     width: rootWidth*0.15
                     height: rootWidth*0.15
                 }
                 Rectangle{
-                    anchors.left:commend_pic.right
+                    anchors.left:comment_pic.right
                     anchors.margins: rootWidth*0.05
                     Text {
-                        id: commend_name
+                        id: comment_name
                         font.bold: true
                         font.pixelSize: 20
                         color: "grey"
-                        text: qsTr(jottingInfo.commend[index].netizenName)
+                        text: qsTr(jottingInfo.comment[index].netizenName)
                     }
                     Text {
-                        id: commend_content
-                        anchors.top: commend_name.bottom
+                        id: comment_content
+                        anchors.top: comment_name.bottom
                         anchors.topMargin: rootWidth*0.01
                         font.pixelSize: 20
-                        text: qsTr(jottingInfo.commend[index].content)
+                        text: qsTr(jottingInfo.comment[index].content)
                     }
                     Text {
-                        id: commend_time
-                        anchors.top: commend_content.bottom
+                        id: comment_time
+                        anchors.top: comment_content.bottom
                         anchors.topMargin: rootWidth*0.01
                         color: "grey"
                         font.pixelSize: 15
-                        text: qsTr(jottingInfo.commend[index].time)
+                        text: qsTr(jottingInfo.comment[index].time)
                     }
                 }
             }
         }
 
         ListView{
-            id:commendListView
+            id:commentListView
             width: rootWidth
             height: rootHeight
-            anchors.top: commend_count.bottom
+            anchors.top: comment_count.bottom
             anchors.left: parent.left
             anchors.margins: rootWidth*0.02
-            model:jottingInfo.commend
-            delegate:commend
+            model:jottingInfo.comment
+            delegate:comment
             spacing:rootHeight*0.1
             clip: true
         }
@@ -338,10 +362,10 @@ Item {
             }
         }
         Row{
-            id:commend_banner
+            id:comment_banner
             Button{
-                id: commend_button_banner
-                icon.source: "qrc:/images/images/commend.png"
+                id: comment_button_banner
+                icon.source: "qrc:/images/images/comment.png"
                 icon.width: rootWidth*0.1
                 icon.height: rootWidth*0.1
                 width: icon.width
@@ -350,7 +374,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text{
-                id:commend_count_banner
+                id:comment_count_banner
                 width: rootWidth*0.05
                 text: qsTr(jottingInfo.commentCount)
                 anchors.verticalCenter: parent.verticalCenter
@@ -432,9 +456,9 @@ Item {
                             toast.show("请填写内容再发送!")
                             toast.anchors.bottomMargin=rootWindow.height*0.1
                         }else{
-                            jottingInfo.commend.push({"netizenName":netizen.nikeName,"pic":"qrc:/images/images/avatar.png","content":comment_edit.text,"time":"2022-06-01 14:12"})
-                            commendListView.model=jottingInfo.commend
-                            commendListView.update()
+                            jottingInfo.comment.push({"netizenName":netizen.nikeName,"pic":"qrc:/images/images/avatar.png","content":comment_edit.text,"time":"2022-06-01 14:12"})
+                            commentListView.model=jottingInfo.comment
+                            commentListView.update()
                             comment_pop.close()
                         }
                     }

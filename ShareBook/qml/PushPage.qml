@@ -19,6 +19,8 @@ Item {
     property var local_jottings
     property var jottings: recommend_jottings
     property var jotting_detail
+    //笔记索引
+    property var jotIndex
 
     Row{
         id:top_banner
@@ -427,9 +429,14 @@ Item {
                 }
                 TapHandler{
                     onTapped: {
-                        pushJottings.receiveOneJotting("1")
+                        console.log("打印点到的笔记ID为："+jottings[index].id)
+
+                        pushJottings.receiveOneJotting(jottings[index].id)
+
                         jotting_detail=JSON.parse(pushJottings.jotting)
                         loader.setSource(jotDetailPage_loader,{"type":"push","jottingInfo":jotting_detail})
+
+                        console.log("显示点到的笔记详情："+jotting_detail)
                     }
                 }
             }

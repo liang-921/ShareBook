@@ -15,6 +15,7 @@ public:
     void sendFile(char *buf, size_t size, std::string filePath);
     bool receive(char * buf);
     void start();
+    void reconnect();
 private:
     Client();
     static Client* m_instance;

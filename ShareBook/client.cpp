@@ -17,7 +17,7 @@ Client *Client::getInstance()
 Client::Client()
 {
     //这里客户端初始化建立连接
-    char ipaddr[MAX] ={"192.168.191.249"};
+    char ipaddr[MAX] ={"192.168.117.249"};
     m_network.createSocket();
     m_network.connectSocket(ipaddr);
     std::cout<<"Client"<<"客户端建立连接，初始化数据中......"<<std::endl;
@@ -39,6 +39,19 @@ bool Client::receive(char * buf)
     return m_network.receiveMessage(buf);
 }
 
+void Client::reconnect()
+{
+    m_network.closeSocket();
+
+    //这里客户端初始化建立连接
+    char ipaddr[MAX] ={"192.168.117.249"};
+    m_network.createSocket();
+    m_network.connectSocket(ipaddr);
+    std::cout<<"Client"<<"客户端重新建立连接，初始化数据中......"<<std::endl;
+
+}
+
 Client::~Client()
 {
+     m_network.closeSocket();
 }

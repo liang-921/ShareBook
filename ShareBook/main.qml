@@ -290,9 +290,10 @@ Window {
                 }
             }
             onClicked: {
-                //发信号给C++ 请求客户端获取服务器传来的个人信息
                 loader.source = personalPage_loader
                 bottom_button.visible = true
+                //发信号给C++ 请求客户端获取服务器传来的个人信息
+                netizen.initData()
             }
             states: [
                 State {

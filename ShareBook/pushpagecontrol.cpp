@@ -26,13 +26,13 @@ void PushPageControl::pushRecommendJottings()
     std::string sendData = message.dump();
     Client::getInstance()->send(sendData.c_str(),sendData.length());
     std::cout<<"Client"<<"客户端获取用户推送笔记的信息......"<<std::endl;
-    char *receiveData = new char[100000000];
+    char *receiveData = new char[10000000];
 
     Client::getInstance()->receive(receiveData);
 
     //获取到的网民基本信息 以 json形式
     nlohmann::json scanInfo = nlohmann::json::parse(receiveData);
-    std::cout<<scanInfo.dump(4)<<std::endl;
+//    std::cout<<scanInfo.dump(4)<<std::endl;
 
     json receiveJottings;
     //浏览的笔记的信息是一个大数组
@@ -41,6 +41,9 @@ void PushPageControl::pushRecommendJottings()
     QHash<QString,QPixmap> allPics;
     for(auto &info:scanInfo){
         json jotting;
+
+        //笔记id
+        jotting["id"] = info["id"];
         //笔记作者昵称
         jotting["nickName"] = info["netizen"]["nickName"];
         //笔记内容
@@ -70,12 +73,6 @@ void PushPageControl::pushRecommendJottings()
             std::string picData=base64_decode(info["materials"][j]["picContent"]);
             newpixmap.loadFromData((unsigned char *)picData.data(),picData.length());
 
-//            string localPath = "/root/"+picId+".png";
-//            cout<<"写到本地"<<endl;
-//            std::ofstream fout(localPath, std::ios::binary);
-//            fout.write(picData.c_str(), picData.size());
-//            fout.close();
-
             picPath["path"] = picNewPath;
 
             jotting["picPath"].push_back(picPath);
@@ -96,34 +93,6 @@ void PushPageControl::pushRecommendJottings()
     m_recommendJottings=QString::fromStdString(receiveJottings.dump());
 
     cout<<"笔记个数："<<receiveJottings["jottings"].size()<<endl;
-//    json jot_json1;
-//    jot_json1["avatar"]="qrc:/images/images/avatar.png";
-//    jot_json1["nickName"]="JongHan";
-//    jot_json1["content"]="We could leave the Christmas";
-//    json picPath1;
-//    picPath1["path"]="qrc:/images/images/avatar.png";
-//    jot_json1["picPath"]={picPath1,picPath1,picPath1};
-
-//    json jot_json2;
-//    jot_json2["avatar"]="qrc:/images/images/avatar.png";
-//    jot_json2["nickName"]="Josua";
-//    jot_json2["content"]="This is our place, we make the rules";
-//    json picPath2;
-//    picPath2["path"]="qrc:/images/images/avatar.png";
-//    jot_json2["picPath"]={picPath2,picPath2};
-
-//    json jot_json3;
-//    jot_json3["avatar"]="qrc:/images/images/avatar.png";
-//    jot_json3["nickName"]="S.coups";
-//    jot_json3["content"]="Hot Hot fighting!";
-//    json picPath3;
-//    picPath3["path"]="qrc:/images/images/avatar.png";
-//    jot_json3["picPath"]={picPath3,picPath3,picPath3};
-
-//    json jottings;
-//    jottings["jottings"]={jot_json1,jot_json2,jot_json3};
-
-//    m_recommendJottings=QString::fromStdString(jottings.dump());
 }
 
 void PushPageControl::pushConcernedJottings()
@@ -177,30 +146,85 @@ void PushPageControl::pushLocalJottings()
 
 void PushPageControl::receiveOneJotting(QString jotting_id)
 {
+
+    qDebug()<<"进来函数： PushPageControl::receiveOneJotting";
     json jotting;
-    jotting["avatar"]="qrc:/images/images/avatar.png";
-    jotting["netizenName"]="NULL";
-    jotting["content"]="Hello";
-    jotting["likeCount"]="0";
-    jotting["collectCount"]="0";
-    jotting["commentCount"]="0";
-    jotting["time"]="0000-00-00 00:00";
+    json recommendJottings = nlohmann::json::parse(m_recommendJottings.toStdString());
+//    std::cout<<recommendJottings["jottings"].dump(4)<<std::endl;
+    for(auto &jot:recommendJottings["jottings"]){
+        if(jot["id"] == jotting_id.toStdString()){
+            jotting["avatar"] = jot["avatarPath"];
+            jotting["netizenName"] = jot["nickName"];
+            jotting["picPath"] = jot["picPath"];
+            jotting["time"] = jot["time"];
+        }
+    }
 
-    json picPath;
-    picPath["path"]="qrc:/images/images/avatar.png";
-    jotting["picPath"]={picPath,picPath,picPath};
+    //要传入的笔记的详情信息
+//    std::cout<<jotting.dump(4)<<std::endl;
 
-    json commend_1;
-    commend_1["netizenName"]="Joey";
-    commend_1["pic"]="qrc:/images/images/avatar.png";
-    commend_1["content"]="very good!";
-    commend_1["time"]="2022-06-01 22:12";
-    json commend_2;
-    commend_2["netizenName"]="Kacy";
-    commend_2["pic"]="qrc:/images/images/avatar.png";
-    commend_2["content"]="I like it!";
-    commend_2["time"]="2022-06-01 14:12";
-    jotting["commend"]={commend_1,commend_2};
+    string id = jotting_id.toStdString();
+    //发送请求 服务端推送客户端确认的某篇笔记的详细信息
+    nlohmann::json message = {
+        {"id","1"},
+        {"jottingId",id},
+        {"request","GetJottingDetail"}
+    };
+
+    std::string sendData = message.dump();
+    Client::getInstance()->reconnect();
+    Client::getInstance()->send(sendData.c_str(),sendData.length());
+    std::cout<<"Client"<<"客户端获取用户推送笔记的详细信息......"<<std::endl;
+    char *receiveData = new char[10000000];
+    Client::getInstance()->receive(receiveData);
+
+    //获取到的笔记的详细信息 评论 以 json形式
+    nlohmann::json commentsInfo = nlohmann::json::parse(receiveData);
+    std::cout<<commentsInfo.dump(4)<<std::endl;
+
+
+    QHash<QString,QPixmap> avatars;
+    for(auto &com:commentsInfo["comment"]){
+        json comment;
+        comment["netizenName"] = com["netizen"]["nickName"];
+        comment["content"] = com["content"];
+        comment["time"] = com["time"];
+        //笔记作者头像信息
+        std::string avatarId = com["netizen"]["avatarId"];
+        string avatarPath = "image://photos/"+avatarId;
+        std::string avatarData=base64_decode(com["netizen"]["avatar"]);
+        QPixmap pixmap;
+        pixmap.loadFromData((unsigned char *)avatarData.data(),avatarData.length());
+        avatars.insert(QString::fromStdString(avatarId),pixmap);
+        comment["pic"]=avatarPath;
+        jotting["comment"].push_back(comment);
+    }
+
+    imageProvider->setDetailUIAvatars(avatars);
+
+//    jotting["avatar"]="qrc:/images/images/avatar.png";
+//    jotting["netizenName"]="NULL";
+//    jotting["content"]="Hello";
+//    jotting["likeCount"]="0";
+//    jotting["collectCount"]="0";
+//    jotting["commentCount"]="0";
+//    jotting["time"]="0000-00-00 00:00";
+
+//    json picPath;
+//    picPath["path"]="qrc:/images/images/avatar.png";
+//    jotting["picPath"]={picPath,picPath,picPath};
+
+//    json commend_1;
+//    commend_1["netizenName"]="Joey";
+//    commend_1["pic"]="qrc:/images/images/avatar.png";
+//    commend_1["content"]="very good!";
+//    commend_1["time"]="2022-06-01 22:12";
+//    json commend_2;
+//    commend_2["netizenName"]="Kacy";
+//    commend_2["pic"]="qrc:/images/images/avatar.png";
+//    commend_2["content"]="I like it!";
+//    commend_2["time"]="2022-06-01 14:12";
+//    jotting["commend"]={commend_1,commend_2};
 
     m_jotting=QString::fromStdString(jotting.dump());
 }

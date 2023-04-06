@@ -16,6 +16,7 @@ public:
     void setFanHashPixmaps(const QHash<QString,QPixmap> &newPixmaps);
     void setpushUIAvatars(const QHash<QString,QPixmap> &newPixmaps);
     void setpushUIPics(const QHash<QString,QPixmap> &newPixmaps);
+    void setDetailUIAvatars(const QHash<QString,QPixmap> &newPixmaps);
 private:
     QPixmap m_avatar;
     QVector<QPixmap> m_pixmaps;
@@ -23,7 +24,9 @@ private:
     QHash<QString,QPixmap> m_interestAvatars;
     QHash<QString,QPixmap> m_fanAvatars;
     QHash<QString,QPixmap> m_pushUIAvatars;
+    QHash<QString,QPixmap> m_detailUIAvatars;
     QHash<QString,QPixmap> m_pushUIPics;
+
 };
 
 #endif // IMAGEPROVIDER_H

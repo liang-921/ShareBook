@@ -166,6 +166,7 @@ void PersonalUIControl::initData()
         {"request","InitPersonalInfo"}
     };
     std::string sendData = message.dump();
+    Client::getInstance()->reconnect();
     Client::getInstance()->send(sendData.c_str(),sendData.length());
     std::cout<<"Client"<<"客户端初始化用户信息......"<<std::endl;
     char *receiveData = new char[100000000];

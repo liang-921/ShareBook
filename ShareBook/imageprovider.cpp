@@ -23,6 +23,8 @@ QPixmap ImageProvider::requestPixmap(const QString &id, QSize *size, const QSize
         return m_pushUIAvatars[id];
     } else if(m_pushUIPics.find(id) != m_pushUIPics.end()){
         return m_pushUIPics[id];
+    }else if(m_detailUIAvatars .find(id) != m_detailUIAvatars.end()){
+        return m_detailUIAvatars[id];
     }
 
     return QPixmap();
@@ -56,6 +58,11 @@ void ImageProvider::setpushUIAvatars(const QHash<QString, QPixmap> &newPixmaps)
 void ImageProvider::setpushUIPics(const QHash<QString, QPixmap> &newPixmaps)
 {
     m_pushUIPics = newPixmaps;
+}
+
+void ImageProvider::setDetailUIAvatars(const QHash<QString, QPixmap> &newPixmaps)
+{
+    m_detailUIAvatars = newPixmaps;
 }
 
 

@@ -38,8 +38,11 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android_sources
+
 DISTFILES += \
     PushPage.qml \
 #    Toast.qml \
-    Toast.qml
+    Toast.qml \
+    android_sources/AndroidManifest.xml
 
