@@ -396,9 +396,8 @@ Item {
                     Text{
                         id:content_text
                         text: qsTr(jottings[index].content)
-                        width: parent.width
                         font.pixelSize: 16
-                        wrapMode: Text.WordWrap
+                        width: rootWidth*0.8
                         clip:true
                         elide: Text.ElideRight
                     }
@@ -407,7 +406,8 @@ Item {
                 Text{
                     id:jottingData
                     anchors.top:content_show.bottom
-                    text: qsTr(jottings[index].time)
+                    text: qsTr("编辑于 "+jottings[index].time)
+                    color:"grey"
                     anchors.left: parent.left
                     font.pixelSize: 12
                     anchors.leftMargin: rootWidth*0.03
@@ -417,11 +417,11 @@ Item {
                     id:check_detail_button
                     anchors.top:jottingData.bottom
                     text: qsTr("查看全文")
-                    font.italic: true
+//                    font.italic: true
                     color:"#668B8B"
                     rightPadding:rootWidth*0.05
                     bottomPadding:rootWidth*0.05
-                    font.pixelSize: 15
+                    font.pixelSize: 14
                     anchors.right: parent.right
                     TapHandler{
                         onTapped: {}
