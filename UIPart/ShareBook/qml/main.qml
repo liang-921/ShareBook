@@ -114,21 +114,21 @@ ApplicationWindow {
                     name: "default"
                     when: bottom_button.currentIndex !== 0
                     PropertyChanges {
-                        target: homeImg; sourceSize: Qt.size(30, 30)
+                        target: homeImg; source:"qrc:/images/images/home.png"
                     }
-                    PropertyChanges {
-                        target: homeText; font.pointSize: 12
-                    }
+//                    PropertyChanges {
+//                        target: homeText; font.pointSize: 12
+//                    }
                 },
                 State {
                     name: "isCurrentIndex"
                     when: bottom_button.currentIndex === 0
                     PropertyChanges {
-                        target: homeImg; sourceSize: Qt.size(35, 35)
+                        target: homeImg; source:"qrc:/images/images/homeIng.png"
                     }
-                    PropertyChanges {
-                        target: homeText; font.pointSize: 14
-                    }
+//                    PropertyChanges {
+//                        target: homeText; font.pointSize: 14
+//                    }
                 }
             ]
         }
@@ -147,7 +147,7 @@ ApplicationWindow {
                     id: cycleImg
                     fillMode: Image.PreserveAspectFit
                     sourceSize: Qt.size(30, 30)
-                    source:"qrc:/images/images/cycle.png"
+                    source:"qrc:/images/images/vedio.png"
                 }
                 Text {
                     id: cycleText
@@ -167,21 +167,21 @@ ApplicationWindow {
                     name: "default"
                     when: bottom_button.currentIndex !== 1
                     PropertyChanges {
-                        target: cycleImg; sourceSize: Qt.size(30, 30)
+                        target: cycleImg; source:"qrc:/images/images/vedio.png"
                     }
-                    PropertyChanges {
-                        target: cycleText; font.pointSize: 12
-                    }
+//                    PropertyChanges {
+//                        target: cycleText; font.pointSize: 12
+//                    }
                 },
                 State {
                     name: "isCurrentIndex"
                     when: bottom_button.currentIndex === 1
                     PropertyChanges {
-                        target: cycleImg; sourceSize: Qt.size(35, 35)
+                        target: cycleImg; source:"qrc:/images/images/vedioIng.png"
                     }
-                    PropertyChanges {
-                        target: cycleText; font.pointSize: 14
-                    }
+//                    PropertyChanges {
+//                        target: cycleText; font.pointSize: 14
+//                    }
                 }
             ]
         }
@@ -252,21 +252,21 @@ ApplicationWindow {
                     name: "default"
                     when: bottom_button.currentIndex !== 3
                     PropertyChanges {
-                        target: messageImg; sourceSize: Qt.size(30, 30)
+                        target: messageImg; source:"qrc:/images/images/message.png"
                     }
-                    PropertyChanges {
-                        target: messageText; font.pointSize: 12
-                    }
+//                    PropertyChanges {
+//                        target: messageText; font.pointSize: 12
+//                    }
                 },
                 State {
                     name: "isCurrentIndex"
                     when: bottom_button.currentIndex === 3
                     PropertyChanges {
-                        target: messageImg; sourceSize: Qt.size(35, 35)
+                        target: messageImg; source:"qrc:/images/images/messageIng.png"
                     }
-                    PropertyChanges {
-                        target: messageText; font.pointSize: 14
-                    }
+//                    PropertyChanges {
+//                        target: messageText; font.pointSize: 14
+//                    }
                 }
             ]
         }
@@ -307,21 +307,21 @@ ApplicationWindow {
                     name: "default"
                     when: bottom_button.currentIndex !== 4
                     PropertyChanges {
-                        target: myImg; sourceSize: Qt.size(30, 30)
+                        target: myImg; source:"qrc:/images/images/personal.png"
                     }
-                    PropertyChanges {
-                        target: myText; font.pointSize: 12
-                    }
+//                    PropertyChanges {
+//                        target: myText; font.pointSize: 12
+//                    }
                 },
                 State {
                     name: "isCurrentIndex"
                     when: bottom_button.currentIndex === 4
                     PropertyChanges {
-                        target: myImg; sourceSize: Qt.size(35, 35)
+                        target: myImg; source:"qrc:/images/images/personalIng.png"
                     }
-                    PropertyChanges {
-                        target: myText; font.pointSize: 14
-                    }
+//                    PropertyChanges {
+//                        target: myText; font.pointSize: 14
+//                    }
                 }
             ]
         }

@@ -159,6 +159,7 @@ Item {
                     TapHandler{
                         onTapped: {
 //                            netizen.initRelationData()
+                            bottom_button.visible = false
                             loader.setSource(personalRelationList,{"ownName":netizen.nickName,"dataType":
                                                  "interest","interestData":JSON.parse(netizen.interest),
                                                  "fanData":JSON.parse(netizen.fans),
@@ -184,6 +185,7 @@ Item {
                     }
                     TapHandler{
                         onTapped: {
+                            bottom_button.visible = false
                             loader.setSource(personalRelationList,{"ownName":netizen.nickName,"dataType":"fan","interestData":JSON.parse(netizen.interest),"fanData":JSON.parse(netizen.fans),"cycleData":JSON.parse(netizen.interest)})
                         }
                     }
@@ -206,6 +208,7 @@ Item {
                     }
                     TapHandler{
                         onTapped: {
+                            bottom_button.visible = false
                             loader.setSource(personalRelationList,{"ownName":netizen.nickName,"dataType":"cycle","interestData":JSON.parse(netizen.interest),"fanData":JSON.parse(netizen.fans),"cycleData":JSON.parse(netizen.interest)})
                         }
                     }
@@ -463,250 +466,5 @@ Item {
         }
     }
 
-    TabBar{
-        id:bottom_button
-        anchors.bottom: parent.bottom
-        contentWidth: parent.width
-        contentHeight: 60
 
-        TabButton {
-            height: parent.height
-            background: Rectangle{
-                color: "white"
-                opacity: 0.7
-            }
-
-            ColumnLayout{
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 1
-                Image {
-                    id: homeImg
-                    fillMode: Image.PreserveAspectFit
-                    sourceSize: Qt.size(30, 30)
-                    source:"qrc:/images/images/home.png"
-                }
-                Text {
-                    id: homeText
-                    text: qsTr("首页")
-                    Layout.alignment: Qt.AlignHCenter
-                    font.pointSize: 12
-                }
-            }
-            onClicked: {
-                loader.source = pushPage_loader
-                bottom_button.visible = true
-            }
-            states: [
-                State {
-                    name: "default"
-                    when: bottom_button.currentIndex !== 0
-                    PropertyChanges {
-                        target: homeImg; sourceSize: Qt.size(30, 30)
-                    }
-                    PropertyChanges {
-                        target: homeText; font.pointSize: 12
-                    }
-                },
-                State {
-                    name: "isCurrentIndex"
-                    when: bottom_button.currentIndex === 0
-                    PropertyChanges {
-                        target: homeImg; sourceSize: Qt.size(35, 35)
-                    }
-                    PropertyChanges {
-                        target: homeText; font.pointSize: 14
-                    }
-                }
-            ]
-        }
-        TabButton {
-            height: parent.height
-            background: Rectangle{
-                color: "white"
-                opacity: 0.7
-            }
-
-            ColumnLayout{
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 1
-                Image {
-                    id: cycleImg
-                    fillMode: Image.PreserveAspectFit
-                    sourceSize: Qt.size(30, 30)
-                    source:"qrc:/images/images/cycle.png"
-                }
-                Text {
-                    id: cycleText
-                    text: qsTr("视频")
-                    Layout.alignment: Qt.AlignHCenter
-                    font.pointSize: 12
-                }
-            }
-            onClicked: {
-                loader.source = cyclePage_loader
-                bottom_button.visible = true
-            }
-
-            states: [
-                State {
-                    name: "default"
-                    when: bottom_button.currentIndex !== 1
-                    PropertyChanges {
-                        target: cycleImg; sourceSize: Qt.size(30, 30)
-                    }
-                    PropertyChanges {
-                        target: cycleText; font.pointSize: 12
-                    }
-                },
-                State {
-                    name: "isCurrentIndex"
-                    when: bottom_button.currentIndex === 1
-                    PropertyChanges {
-                        target: cycleImg; sourceSize: Qt.size(35, 35)
-                    }
-                    PropertyChanges {
-                        target: cycleText; font.pointSize: 14
-                    }
-                }
-            ]
-        }
-        TabButton {
-            height: parent.height
-            background: Rectangle{
-                color: "white"
-                opacity: 0.7
-            }
-
-            ColumnLayout{
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 1
-                Image {
-                    id: publishImg
-                    fillMode: Image.PreserveAspectFit
-                    sourceSize: Qt.size(30, 30)
-                    source:"qrc:/images/images/publish.png"
-                }
-                Text {
-                    id: publishText
-                    text: qsTr("发布")
-                    Layout.alignment: Qt.AlignHCenter
-                    font.pointSize: 12
-                }
-            }
-            onClicked: {
-                loader.source = chooseMaterialPage_loader
-                bottom_button.z = -1
-
-            }
-        }
-
-        TabButton {
-            height: parent.height
-            background: Rectangle{
-                color: "white"
-                opacity: 0.7
-            }
-
-            ColumnLayout{
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 1
-                Image {
-                    id: messageImg
-                    fillMode: Image.PreserveAspectFit
-                    sourceSize: Qt.size(30, 30)
-                    source:"qrc:/images/images/message.png"
-                }
-                Text {
-                    id: messageText
-                    text: qsTr("消息")
-                    Layout.alignment: Qt.AlignHCenter
-                    font.pointSize: 12
-                }
-            }
-            onClicked: {
-                loader.source = messagePage_loader
-                bottom_button.visible = true
-            }
-            states: [
-                State {
-                    name: "default"
-                    when: bottom_button.currentIndex !== 3
-                    PropertyChanges {
-                        target: messageImg; sourceSize: Qt.size(30, 30)
-                    }
-                    PropertyChanges {
-                        target: messageText; font.pointSize: 12
-                    }
-                },
-                State {
-                    name: "isCurrentIndex"
-                    when: bottom_button.currentIndex === 3
-                    PropertyChanges {
-                        target: messageImg; sourceSize: Qt.size(35, 35)
-                    }
-                    PropertyChanges {
-                        target: messageText; font.pointSize: 14
-                    }
-                }
-            ]
-        }
-
-        TabButton {
-            height: parent.height
-            background: Rectangle{
-                color: "white"
-                opacity: 0.7
-            }
-
-            ColumnLayout{
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 1
-                Image {
-                    id: myImg
-                    fillMode: Image.PreserveAspectFit
-                    sourceSize: Qt.size(30, 30)
-                    source:"qrc:/images/images/personal.png"
-                }
-                Text {
-                    id: myText
-                    text: qsTr("我")
-                    Layout.alignment: Qt.AlignHCenter
-                    font.pointSize: 12
-                }
-            }
-            onClicked: {
-                loader.source = personalPage_loader
-                bottom_button.visible = true
-                //发信号给C++ 请求客户端获取服务器传来的个人信息
-//                netizen.initData()
-            }
-            states: [
-                State {
-                    name: "default"
-                    when: bottom_button.currentIndex !== 4
-                    PropertyChanges {
-                        target: myImg; sourceSize: Qt.size(30, 30)
-                    }
-                    PropertyChanges {
-                        target: myText; font.pointSize: 12
-                    }
-                },
-                State {
-                    name: "isCurrentIndex"
-                    when: bottom_button.currentIndex === 4
-                    PropertyChanges {
-                        target: myImg; sourceSize: Qt.size(35, 35)
-                    }
-                    PropertyChanges {
-                        target: myText; font.pointSize: 14
-                    }
-                }
-            ]
-        }
-    }
 }

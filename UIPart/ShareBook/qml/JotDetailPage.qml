@@ -17,6 +17,7 @@ Item {
     property var temp: jottingInfo.comment
 
 
+
     Rectangle{
         id:netizen_info
         width:rootWidth
@@ -160,7 +161,7 @@ Item {
         id:jotting_content
         anchors.top: seperator_line_1.bottom
         anchors.topMargin: rootWidth*0.01
-        anchors.bottom: mark_banner.top
+//        anchors.bottom: mark_banner.top
         width: rootWidth
         contentWidth:rootWidth
         contentHeight:image_area.height+indicator.height+content.height+time.height+comment_count.height+rootHeight*0.2+commentListView.contentHeight
@@ -304,8 +305,9 @@ Item {
                 Row{
                     anchors.centerIn: parent
                     IconImage{
-                        width:rootWidth*0.1
-                        height:width
+//                        width:rootWidth*0.1
+//                        height:width
+                        sourceSize: Qt.size(28, 28)
                         source: "qrc:/images/images/comment.png"
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -323,6 +325,11 @@ Item {
                     }
                 }
             }
+//            Item{
+//                width: rootWidth*0.1
+//                height: rootHeight*0.05
+//            }
+
             Row{
                 id:like_banner
                 Button{

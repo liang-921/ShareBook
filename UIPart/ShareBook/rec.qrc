@@ -9,7 +9,6 @@
         <file>images/collected.png</file>
         <file>images/commend.png</file>
         <file>images/comment.png</file>
-        <file>images/cycle.png</file>
         <file>images/firstPic0.png</file>
         <file>images/groupChat.png</file>
         <file>images/head.png</file>
@@ -28,5 +27,10 @@
         <file>images/share.png</file>
         <file>images/system_talk.png</file>
         <file>images/transit.png</file>
+        <file>images/homeIng.png</file>
+        <file>images/personalIng.png</file>
+        <file>images/messageIng.png</file>
+        <file>images/vedioIng.png</file>
+        <file>images/vedio.png</file>
     </qresource>
 </RCC>

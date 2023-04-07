@@ -51,6 +51,7 @@ Item {
         flat: true
         icon.color: "transparent"
         onClicked: {
+            bottom_button.visible = true
             loader.source=personalPage_loader
         }
     }
