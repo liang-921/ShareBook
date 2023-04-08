@@ -1,31 +1,54 @@
 QT += quick
-CONFIG += console c++17
 
-HEADERS += \
-    base64.h \
-    client.h \
-    network.h \
-    imageprovider.h \
-    personaluicontrol.h \
-    publishpagecontrol.h \
-    pushpagecontrol.h \
-    roundimage.h
+# You can make your code fail to compile if it uses deprecated APIs.
+# In order to do so, uncomment the following line.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
 
 SOURCES += \
         base64.cpp \
-        main.cpp \
         client.cpp \
-        network.cpp \
         imageprovider.cpp \
+        main.cpp \
+    messageuicontrol.cpp \
+        network.cpp \
         personaluicontrol.cpp \
         publishpagecontrol.cpp \
         pushpagecontrol.cpp \
-        roundimage.cpp
 
-resources.files = main.qml Toast.qml
+resources.files = qml/main.qml \
+                    qml/ChooseMaterialPage.qml \
+                    qml/CyclePage.qml \
+                    qml/JotDetailPage.qml \
+                    qml/MessagePage.qml \
+                    qml/PersonalPage.qml \
+                    qml/PushPage.qml \
+                    qml/PersonalRelationList.qml \
+                    qml/PublishPage.qml \
+                    qml/Toast.qml
+
+DISTFILES += \
+    android_sources/AndroidManifest.xml \
+    android_sources/res/drawable-hdpi/icon.png \
+    android_sources/res/drawable-ldpi/icon.png \
+    android_sources/res/drawable-mdpi/icon.png \
+    android_sources/res/drawable-xhdpi/icon.png \
+    android_sources/res/drawable-xxhdpi/icon.png \
+    android_sources/res/drawable-xxxhdpi/icon.png \
+    qml/ChooseMaterialPage.qml \
+    qml/CyclePage.qml \
+    qml/JotDetailPage.qml \
+    qml/MessagePage.qml \
+    qml/PersonalPage.qml \
+    qml/PersonalRelationList.qml \
+    qml/PublishPage.qml \
+    qml/PushPage.qml \
+    qml/Toast.qml \
+    qml/main.qml
+
 resources.prefix = /$${TARGET}
 RESOURCES += resources \
-    res.qrc
+    rec.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -40,9 +63,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android_sources
 
-DISTFILES += \
-    PushPage.qml \
-#    Toast.qml \
-    Toast.qml \
-    android_sources/AndroidManifest.xml
-
+HEADERS += \
+    base64.h \
+    client.h \
+    imageprovider.h \
+    messageuicontrol.h \
+    network.h \
+    personaluicontrol.h \
+    publishpagecontrol.h \
+    pushpagecontrol.h \

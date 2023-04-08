@@ -17,6 +17,8 @@ public:
     void setpushUIAvatars(const QHash<QString,QPixmap> &newPixmaps);
     void setpushUIPics(const QHash<QString,QPixmap> &newPixmaps);
     void setDetailUIAvatars(const QHash<QString,QPixmap> &newPixmaps);
+
+    QPixmap getPicture(std::string path);
 private:
     QPixmap m_avatar;
     QVector<QPixmap> m_pixmaps;

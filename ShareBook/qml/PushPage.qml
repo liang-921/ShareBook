@@ -4,12 +4,14 @@ import QtQuick.Layouts
 import QtQuick
 import Qt5Compat.GraphicalEffects
 
+
 Item {
     id:pushPage
 
     readonly property int rootWidth: pushPage.width
     readonly property int rootHeight: pushPage.height
-    readonly property url personalPage: "qrc:/qml/qml/JotDetailPage.qml"
+    readonly property url personalPage: "JotDetailPage.qml"
+
 
     property bool isGetConcerned: false
     property bool isGetLocal: false
@@ -18,9 +20,13 @@ Item {
     property var concerned_jottings
     property var local_jottings
     property var jottings: recommend_jottings
+
+
+
     property var jotting_detail
     //笔记索引
     property var jotIndex
+
 
     Row{
         id:top_banner
@@ -168,9 +174,17 @@ Item {
                 width:rootWidth
                 height:rootHeight*0.5
 //                radius: 10
-                border.color: "grey"
-                border.width:1
-//                anchors.bottomMargin: 0
+//                border.color: "grey"
+//                border.width:1
+
+                Rectangle{
+                    id:seperator_line_2
+                    width: parent.width
+                    height: 1
+                    color: "grey"
+                    anchors.top: jotting.top
+                    anchors.topMargin: parent.height*0.01
+                }
 
                 Rectangle{
                     id:head_banner
@@ -178,7 +192,7 @@ Item {
                     height:rootWidth*0.1
                     width:rootWidth
                     color:"transparent"
-                    anchors.top: jotting.top
+                    anchors.top: seperator_line_2.bottom
                     anchors.topMargin: rootWidth*0.02
                     Rectangle {
                         id: headimg
@@ -196,6 +210,7 @@ Item {
                             visible: false
                             anchors.fill: parent
                             anchors.centerIn: parent.Center
+//                          source: "qrc:/images/images/headpic.png"
                             source: jottings[index].avatarPath
                             sourceSize: Qt.size(parent.size*0.8, parent.size*0.8)
                             antialiasing: true
@@ -232,8 +247,8 @@ Item {
                     Button{
                         id:other_choice
 
-                        width: rootWidth*0.1
-                        height: rootWidth*0.1
+                        width: rootWidth*0.08
+                        height: rootWidth*0.08
                         Image{
                             anchors.fill: parent
                             fillMode: Image.PreserveAspectFit
@@ -251,20 +266,11 @@ Item {
                 }
 
 
-                Rectangle{
-                    id:seperator_line_2
-                    width: parent.width
-                    height: 1
-                    color: "grey"
-                    anchors.top: head_banner.bottom
-                    anchors.topMargin: parent.height*0.01
-                }
-
                 SwipeView{
                     id:image_area
                     width: rootWidth
                     height: rootHeight*0.3
-                    anchors.top: seperator_line_2.bottom
+                    anchors.top: head_banner.bottom
                     anchors.margins: rootWidth*0.02
                     currentIndex: indicator.currentIndex
                     Repeater{
@@ -273,6 +279,7 @@ Item {
                             width: rootWidth
                             height: parent.height
                             fillMode: Image.PreserveAspectFit
+//                            source:"qrc:/images/images/head.png"
                             source:jottings[jottingIndex.text].picPath[index].path
                         }
                     }
@@ -406,6 +413,7 @@ Item {
                 Text{
                     id:jottingData
                     anchors.top:content_show.bottom
+//                    text: qsTr("编辑于 "+"XXXX-XX-XX hh:mm:ss")
                     text: qsTr("编辑于 "+jottings[index].time)
                     color:"grey"
                     anchors.left: parent.left
@@ -427,16 +435,20 @@ Item {
                         onTapped: {}
                     }
                 }
+
                 TapHandler{
                     onTapped: {
                         console.log("打印点到的笔记ID为："+jottings[index].id)
 
+                        bottom_button.visible = false
                         pushJottings.receiveOneJotting(jottings[index].id)
 
                         jotting_detail=JSON.parse(pushJottings.jotting)
                         loader.setSource(jotDetailPage_loader,{"type":"push","jottingInfo":jotting_detail})
 
-                        console.log("显示点到的笔记详情："+jotting_detail)
+                        console.log("===============================网民昵称："+netizen.nikeName)
+
+//                        console.log("显示点到的笔记详情："+jotting_detail)
                     }
                 }
             }
@@ -447,7 +459,7 @@ Item {
             anchors.fill: parent
             model: jottings
             delegate: jottingComponent
-            spacing:rootHeight*0.01
+//            spacing:rootHeight*0.01
         }
     }
 }

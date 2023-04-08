@@ -1,30 +1,30 @@
 import QtQuick
-import QtQuick.Layouts
+import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Layouts
 import UIControl 1.0
 
-Window {
+ApplicationWindow {
     id:rootWindow
-    width: 600
+    width: 543
     height: 1000
-    minimumHeight: 1000
-    minimumWidth: 580
-    maximumHeight: 1000
-    maximumWidth: 580
     visible: true
     title: qsTr("ShareBook")
     color: "#ffffff"
 
-    readonly property url pushPage_loader: "qrc:/qml/qml/PushPage.qml"
-    readonly property url cyclePage_loader: "qrc:/qml/qml/CyclePage.qml"
-    readonly property url chooseMaterialPage_loader: "qrc:/qml/qml/ChooseMaterialPage.qml"
-    readonly property url messagePage_loader: "qrc:/qml/qml/MessagePage.qml"
-    readonly property url personalPage_loader: "qrc:/qml/qml/PersonalPage.qml"
-    readonly property url jotDetailPage_loader: "qrc:/qml/qml/JotDetailPage.qml"
-    readonly property url publishPage_loader: "qrc:/qml/qml/PublishPage.qml"
+//    qrc:/qml/PushPage.qml
+    readonly property url pushPage_loader: "PushPage.qml"
+    readonly property url cyclePage_loader: "CyclePage.qml"
+    readonly property url chooseMaterialPage_loader: "ChooseMaterialPage.qml"
+    readonly property url messagePage_loader: "MessagePage.qml"
+    readonly property url personalPage_loader: "PersonalPage.qml"
+    readonly property url jotDetailPage_loader: "JotDetailPage.qml"
+    readonly property url publishPage_loader: "PublishPage.qml"
+
     readonly property int iconSize_avg:rootWindow.width * 0.2
 
     property var materialData
+
 
     QtObject {
         id: settings
@@ -54,13 +54,13 @@ Window {
         }
     }
 
-    Toast{
-        id:toast
-        rootWidth: rootWindow.width
-        rootHeight: rootWindow.height
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: rootWindow.height*0.1
-    }
+//    Toast{
+//        id:toast
+//        rootWidth: rootWindow.width
+//        rootHeight: rootWindow.height
+//        anchors.bottom: parent.bottom
+//        anchors.bottomMargin: rootWindow.height*0.1
+//    }
 
     Loader {
         id: loader
@@ -69,16 +69,17 @@ Window {
         source:pushPage_loader
         Component.onCompleted: {
 //            netizen.initData()
-//            netizen.initRelationData()
             pushJottings.pushRecommendJottings()
         }
     }
+
 
     TabBar{
         id:bottom_button
         anchors.bottom: parent.bottom
         contentWidth: parent.width
         contentHeight: 60
+
         TabButton {
             height: parent.height
             background: Rectangle{
@@ -106,27 +107,28 @@ Window {
             onClicked: {
                 loader.source = pushPage_loader
                 bottom_button.visible = true
+                console.log("加载 "+ loader.source)
             }
             states: [
                 State {
                     name: "default"
                     when: bottom_button.currentIndex !== 0
                     PropertyChanges {
-                        target: homeImg; sourceSize: Qt.size(30, 30)
+                        target: homeImg; source:"qrc:/images/images/home.png"
                     }
-                    PropertyChanges {
-                        target: homeText; font.pointSize: 12
-                    }
+//                    PropertyChanges {
+//                        target: homeText; font.pointSize: 12
+//                    }
                 },
                 State {
                     name: "isCurrentIndex"
                     when: bottom_button.currentIndex === 0
                     PropertyChanges {
-                        target: homeImg; sourceSize: Qt.size(35, 35)
+                        target: homeImg; source:"qrc:/images/images/homeIng.png"
                     }
-                    PropertyChanges {
-                        target: homeText; font.pointSize: 14
-                    }
+//                    PropertyChanges {
+//                        target: homeText; font.pointSize: 14
+//                    }
                 }
             ]
         }
@@ -145,7 +147,7 @@ Window {
                     id: cycleImg
                     fillMode: Image.PreserveAspectFit
                     sourceSize: Qt.size(30, 30)
-                    source:"qrc:/images/images/cycle.png"
+                    source:"qrc:/images/images/vedio.png"
                 }
                 Text {
                     id: cycleText
@@ -157,6 +159,7 @@ Window {
             onClicked: {
                 loader.source = cyclePage_loader
                 bottom_button.visible = true
+                console.log("加载 "+ loader.source)
             }
 
             states: [
@@ -164,21 +167,21 @@ Window {
                     name: "default"
                     when: bottom_button.currentIndex !== 1
                     PropertyChanges {
-                        target: cycleImg; sourceSize: Qt.size(30, 30)
+                        target: cycleImg; source:"qrc:/images/images/vedio.png"
                     }
-                    PropertyChanges {
-                        target: cycleText; font.pointSize: 12
-                    }
+//                    PropertyChanges {
+//                        target: cycleText; font.pointSize: 12
+//                    }
                 },
                 State {
                     name: "isCurrentIndex"
                     when: bottom_button.currentIndex === 1
                     PropertyChanges {
-                        target: cycleImg; sourceSize: Qt.size(35, 35)
+                        target: cycleImg; source:"qrc:/images/images/vedioIng.png"
                     }
-                    PropertyChanges {
-                        target: cycleText; font.pointSize: 14
-                    }
+//                    PropertyChanges {
+//                        target: cycleText; font.pointSize: 14
+//                    }
                 }
             ]
         }
@@ -209,6 +212,7 @@ Window {
             onClicked: {
                 loader.source = chooseMaterialPage_loader
                 bottom_button.z = -1
+                console.log("加载 "+ loader.source)
 
             }
         }
@@ -238,29 +242,31 @@ Window {
                 }
             }
             onClicked: {
+
                 loader.source = messagePage_loader
                 bottom_button.visible = true
+                console.log("加载 "+ loader.source)
             }
             states: [
                 State {
                     name: "default"
                     when: bottom_button.currentIndex !== 3
                     PropertyChanges {
-                        target: messageImg; sourceSize: Qt.size(30, 30)
+                        target: messageImg; source:"qrc:/images/images/message.png"
                     }
-                    PropertyChanges {
-                        target: messageText; font.pointSize: 12
-                    }
+//                    PropertyChanges {
+//                        target: messageText; font.pointSize: 12
+//                    }
                 },
                 State {
                     name: "isCurrentIndex"
                     when: bottom_button.currentIndex === 3
                     PropertyChanges {
-                        target: messageImg; sourceSize: Qt.size(35, 35)
+                        target: messageImg; source:"qrc:/images/images/messageIng.png"
                     }
-                    PropertyChanges {
-                        target: messageText; font.pointSize: 14
-                    }
+//                    PropertyChanges {
+//                        target: messageText; font.pointSize: 14
+//                    }
                 }
             ]
         }
@@ -294,29 +300,25 @@ Window {
                 bottom_button.visible = true
                 //发信号给C++ 请求客户端获取服务器传来的个人信息
                 netizen.initData()
+                console.log("加载 "+ loader.source)
             }
             states: [
                 State {
                     name: "default"
                     when: bottom_button.currentIndex !== 4
                     PropertyChanges {
-                        target: myImg; sourceSize: Qt.size(30, 30)
-                    }
-                    PropertyChanges {
-                        target: myText; font.pointSize: 12
+                        target: myImg; source:"qrc:/images/images/personal.png"
                     }
                 },
                 State {
                     name: "isCurrentIndex"
                     when: bottom_button.currentIndex === 4
                     PropertyChanges {
-                        target: myImg; sourceSize: Qt.size(35, 35)
-                    }
-                    PropertyChanges {
-                        target: myText; font.pointSize: 14
+                        target: myImg; source:"qrc:/images/images/personalIng.png"
                     }
                 }
             ]
         }
     }
+
 }

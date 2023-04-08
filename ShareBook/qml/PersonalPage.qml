@@ -10,10 +10,14 @@ Item {
 
     readonly property int rootWidth: personalPage.width
     readonly property int rootHeight: personalPage.height
-    readonly property url personalJottingList: "qrc:/qml/qml/PersonalJottingList.qml"
-    readonly property url personalRelationList: "qrc:/qml/qml/PersonalRelationList.qml"
+    readonly property url personalJottingList: "PersonalJottingList.qml"
+    readonly property url personalRelationList: "PersonalRelationList.qml"
 
     property var jsonData:JSON.parse(netizen.jottings)
+    property var jotting_detail
+
+    property var netizenName: netizen.nickName
+    property var netizenAvatar: netizen.avatar
 
     ScrollView{
         anchors.fill: parent
@@ -83,6 +87,7 @@ Item {
                         visible: false
                         anchors.fill: parent
                         source: "image://photos/avatar"
+//                        source: "qrc:/images/images/headpic.png"
                         sourceSize: Qt.size(parent.size, parent.size)
                         antialiasing: true
                     }
@@ -159,6 +164,7 @@ Item {
                     TapHandler{
                         onTapped: {
 //                            netizen.initRelationData()
+                            bottom_button.visible = false
                             loader.setSource(personalRelationList,{"ownName":netizen.nickName,"dataType":
                                                  "interest","interestData":JSON.parse(netizen.interest),
                                                  "fanData":JSON.parse(netizen.fans),
@@ -184,6 +190,7 @@ Item {
                     }
                     TapHandler{
                         onTapped: {
+                            bottom_button.visible = false
                             loader.setSource(personalRelationList,{"ownName":netizen.nickName,"dataType":"fan","interestData":JSON.parse(netizen.interest),"fanData":JSON.parse(netizen.fans),"cycleData":JSON.parse(netizen.interest)})
                         }
                     }
@@ -206,6 +213,7 @@ Item {
                     }
                     TapHandler{
                         onTapped: {
+                            bottom_button.visible = false
                             loader.setSource(personalRelationList,{"ownName":netizen.nickName,"dataType":"cycle","interestData":JSON.parse(netizen.interest),"fanData":JSON.parse(netizen.fans),"cycleData":JSON.parse(netizen.interest)})
                         }
                     }
@@ -417,6 +425,7 @@ Item {
                                 Image {
                                     id: pic
                                     anchors.fill: parent
+//                                    source:"qrc:/images/images/head.png"
                                     source: jsonData[index].picPath
                                     fillMode: Image.PreserveAspectFit
                                     asynchronous: true
@@ -439,11 +448,20 @@ Item {
                                 text: jsonData[index].content
                                 wrapMode: Text.WordWrap
                                 leftPadding:5
+//                                clip:true
+//                                elide: Text.ElideRight
                             }
                         }
                         TapHandler{
                             onTapped: {
-                                loader.setSource(jsonData[index].file,{"type":"self"})
+                                console.log("打印点到的笔记ID为："+jsonData[index].jottingId)
+                                bottom_button.visible = false
+
+                                netizen.getOneJottingDetail(jsonData[index].jottingId)
+
+                                jotting_detail = JSON.parse(netizen.jotting)
+
+                                loader.setSource(jsonData[index].file,{"type":"self","jottingInfo":jotting_detail})
                             }
                         }
                     }

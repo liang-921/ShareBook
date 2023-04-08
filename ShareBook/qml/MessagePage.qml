@@ -2,7 +2,6 @@ import QtQuick 2.0
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick
-import UIControl 1.0
 import Qt5Compat.GraphicalEffects
 
 
@@ -10,6 +9,11 @@ Item {
     id:messagePage
     readonly property int rootWidth: messagePage.width
     readonly property int rootHeight: messagePage.height
+
+
+    //消息数据
+    property var messageData: value
+
 
     Rectangle{
         id:topRec
@@ -153,6 +157,212 @@ Item {
                 console.log("评论和@被点击了!")
             }
         }
+    }
+
+
+
+    ScrollView{
+        width: rootWidth
+        height: rootHeight*0.85
+        anchors.top: midRow.bottom
+        anchors.topMargin: rootWidth*0.1
+
+
+        Component{
+            id:messageComponent
+            Rectangle{
+                id:message
+                width:rootWidth
+                height:rootWidth*0.2
+                anchors.bottomMargin:  rootWidth*0.01
+
+                Button{
+                    id:messageBtn
+                    anchors.fill: parent
+                    background: Rectangle{
+                        color: "transparent"
+                    }
+
+                    Rectangle{
+                        id:recImg
+                        width: rootWidth*0.12
+                        height: rootWidth*0.12
+                        anchors.left: parent.left
+                        anchors.leftMargin:  rootWidth*0.03
+                         anchors.verticalCenter: parent.verticalCenter
+                        Image {
+                            id: head_image
+                            smooth: true
+                            visible: false
+                            anchors.fill: parent
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.centerIn: parent.Center
+                            source: "qrc:/images/images/head.png"
+                            sourceSize: Qt.size(parent.size, parent.size)
+                            antialiasing: true
+                        }
+                        Rectangle {
+                            id: head_mask
+                            color: "black"
+                            anchors.fill: parent
+                            radius: width/2
+                            visible: false
+                            antialiasing: true
+                            smooth: true
+                        }
+                        OpacityMask {
+                            id:mask_image
+                            anchors.fill: head_image
+                            source: head_image
+                            maskSource: head_mask
+                            visible: true
+                            antialiasing: true
+                        }
+                    }
+
+                    Rectangle{
+                        height: rootWidth*0.1
+                        anchors.left:recImg.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.margins: rootWidth*0.05
+                        anchors.right: parent.right
+                        Text {
+                            id: name
+                            font.bold: true
+                            font.pixelSize: 15
+                            color: "grey"
+                            text: qsTr("昵称")
+                        }
+                        Text {
+                            id: content
+                            anchors.top: name.bottom
+                            anchors.topMargin: rootWidth*0.01
+                            font.pixelSize: 15
+                            text: qsTr("您关注的人发布了新的笔记！")
+                        }
+                        Text {
+                            id: comment_time
+                            anchors.left: name.right
+                            anchors.leftMargin: rootWidth*0.6
+                            anchors.right: parent.right
+                            anchors.rightMargin: rootWidth*0.05
+                            color: "grey"
+                            font.pixelSize: 15
+                            text: qsTr("时间")
+                        }
+                    }
+
+
+                    onClicked: {
+                        console.log("这个消息被点击了！")
+                    }
+                }
+
+            }
+        }
+
+        ListView{
+            id:messageList
+            anchors.fill: parent
+            delegate:messageComponent
+            model:listMode
+        }
+
+
+        ListModel{
+            id:listMode
+                ListElement {
+                   name: "Bill Smith"
+                   number: "555 3264"
+                   color1:"red"
+                }
+                ListElement {
+                   name: "John Brown"
+                   number: "555 8426"
+                   color1:"green"
+                }
+                ListElement {
+                   name: "Sam Wise"
+                   number: "555 0473"
+                    color1:"blue"
+                }
+                ListElement {
+                   name: "Bill Smith"
+                   number: "555 3264"
+                   color1:"red"
+                }
+                ListElement {
+                   name: "John Brown"
+                   number: "555 8426"
+                   color1:"green"
+                }
+                ListElement {
+                   name: "Sam Wise"
+                   number: "555 0473"
+                    color1:"blue"
+                }
+                ListElement {
+                   name: "Bill Smith"
+                   number: "555 3264"
+                   color1:"red"
+                }
+                ListElement {
+                   name: "John Brown"
+                   number: "555 8426"
+                   color1:"green"
+                }
+                ListElement {
+                   name: "Sam Wise"
+                   number: "555 0473"
+                    color1:"blue"
+                }
+                ListElement {
+                   name: "Bill Smith"
+                   number: "555 3264"
+                   color1:"red"
+                }
+                ListElement {
+                   name: "John Brown"
+                   number: "555 8426"
+                   color1:"green"
+                }
+                ListElement {
+                   name: "Sam Wise"
+                   number: "555 0473"
+                    color1:"blue"
+                }
+                ListElement {
+                   name: "Bill Smith"
+                   number: "555 3264"
+                   color1:"red"
+                }
+                ListElement {
+                   name: "John Brown"
+                   number: "555 8426"
+                   color1:"green"
+                }
+                ListElement {
+                   name: "Sam Wise"
+                   number: "555 0473"
+                    color1:"blue"
+                }
+                ListElement {
+                   name: "Bill Smith"
+                   number: "555 3264"
+                   color1:"red"
+                }
+                ListElement {
+                   name: "John Brown"
+                   number: "555 8426"
+                   color1:"green"
+                }
+                ListElement {
+                   name: "Sam Wise"
+                   number: "555 0473"
+                    color1:"blue"
+                }
+        }
+
     }
 
 

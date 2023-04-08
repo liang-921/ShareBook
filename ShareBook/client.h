@@ -16,6 +16,7 @@ public:
     bool receive(char * buf);
     void start();
     void reconnect();
+    std::string receiveFile();
 private:
     Client();
     static Client* m_instance;

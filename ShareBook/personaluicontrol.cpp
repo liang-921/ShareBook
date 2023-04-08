@@ -37,15 +37,25 @@ QString PersonalUIControl::getSign() const
     return m_sign;
 }
 
-void PersonalUIControl::setavatar(const QString &avatar)
+void PersonalUIControl::setAvatar(const QString &avatar)
 {
     m_avatar=avatar;
     emit avatarChanged(m_avatar);
 }
 
-QString PersonalUIControl::getavatar() const
+QString PersonalUIControl::getAvatar() const
 {
     return m_avatar;
+}
+
+void PersonalUIControl::setJotting(const QString &jotting)
+{
+     m_jotting=jotting;
+}
+
+QString PersonalUIControl::getJotting() const
+{
+    return m_jotting;
 }
 
 
@@ -60,16 +70,6 @@ QString PersonalUIControl::getJottings() const
     return m_jottings;
 }
 
-void PersonalUIControl::setPicPath(const QString &picPath)
-{
-    m_picPath=picPath;
-    emit picPathChanged(m_picPath);
-}
-
-QString PersonalUIControl::getPicPath() const
-{
-    return m_picPath;
-}
 
 void PersonalUIControl::setInterest(const QString &interest)
 {
@@ -192,6 +192,7 @@ void PersonalUIControl::initData()
     newpixmap.loadFromData((unsigned char *)avatarData.data(),avatarData.length());
     imageProvider->setAvatar(newpixmap);
 
+    //获取笔记信息
     QJsonArray jottingsArray = rootObj["jottings"].toArray();
     QJsonArray array;
     QHash<QString,QPixmap> firstPicHash;
@@ -203,12 +204,13 @@ void PersonalUIControl::initData()
         QPixmap pixmap;
         pixmap.loadFromData((unsigned char *)data.data(),data.length());
 
-
         firstPicHash.insert(QString::fromStdString(imgId),pixmap);
 
         string picPath = "image://photos/"+ imgId;
+
+        jot_Obj.insert("jottingId",QString::fromStdString(personInfo["jottings"][i]["id"]));
         jot_Obj.insert("picPath",QString::fromStdString(picPath));
-        jot_Obj.insert("file","qrc:/qml/qml/JotDetailPage.qml");
+        jot_Obj.insert("file","JotDetailPage.qml");
         array.append(QJsonValue(jot_Obj));
     }
     imageProvider->setHashPixmaps(firstPicHash);
@@ -235,7 +237,7 @@ void PersonalUIControl::initData()
         arrayIn.append(QJsonValue(interest_json1));
         QJsonDocument interest_doc(arrayIn);
         m_interest=QString(interest_doc.toJson(QJsonDocument::Indented));
-    }else{
+    } else {
         QJsonArray interestsArray = rootObj["concernedInfo"].toArray();
         qDebug()<<interestsArray.isEmpty();
         for(int i=0;i<interestsArray.size();i++){
@@ -286,89 +288,88 @@ void PersonalUIControl::initData()
     }
 }
 
-void PersonalUIControl::initRelationData()
-{
-//    发送请求获取网名id为~~~的相关数据
-    nlohmann::json message = {
-        {"id","2"},
-        {"request","InitRelationInfo"}
-    };
-    std::string sendData = message.dump();
-    Client::getInstance()->send(sendData.c_str(),sendData.length());
-    std::cout<<"Client"<<"客户端初始化用户关注和粉丝信息......"<<std::endl;
-    char *receiveData = new char[100000000];
 
+//获取某一篇笔记的详细信息
+void PersonalUIControl::getOneJottingDetail(QString jotting_id)
+{
+    qDebug()<<"进来函数： PersonalUIControl::getOneJottingDetail============================";
+    qDebug()<<"获取个人页面某篇笔记的详细信息";
+
+    string id = jotting_id.toStdString();
+    //发送请求 服务端推送个人页面确认的某篇笔记的详细信息
+    nlohmann::json message = {
+        {"id","1"},
+        {"jottingId",id},
+        {"request","GetInfoJottingDetail"}
+    };
+
+    std::string sendData = message.dump();
+    Client::getInstance()->reconnect();
+    Client::getInstance()->send(sendData.c_str(),sendData.length());
+    std::cout<<"Client"<<"客户端获取用户推送个人页面笔记的详细信息......"<<std::endl;
+    char *receiveData = new char[10000000];
     Client::getInstance()->receive(receiveData);
 
-    //获取到的网民其他信息 以 json形式
-    nlohmann::json relationInfo = nlohmann::json::parse(receiveData);
-    cout<<relationInfo.dump(4)<<endl;
+    //获取到的笔记的详细信息
+    nlohmann::json jottingInfo = nlohmann::json::parse(receiveData);
+    std::cout<<jottingInfo.dump(4)<<std::endl;
+
+    nlohmann::json jotting;
+    jotting["netizenName"] =  jottingInfo["netizen"]["nickName"];
+    jotting["content"] =  jottingInfo["content"];
+    jotting["time"] =  jottingInfo["time"];
+
+    //笔记作者头像信息
+    std::string avatarId = jottingInfo["netizen"]["avatarId"];
+    string avatarPath = "image://photos/"+avatarId;
+    std::string avatarData=base64_decode(jottingInfo["netizen"]["avatar"]);
+    QPixmap pixmap;
+    pixmap.loadFromData((unsigned char *)avatarData.data(),avatarData.length());
+    imageProvider->setAvatar(pixmap);
+    jotting["avatar"] = avatarPath;
+    m_avatar = QString::fromStdString(avatarPath);
 
 
-    QJsonObject rootObj = transition(relationInfo);   //最后转换出来的json 对象
-    QJsonArray interestsArray = rootObj["concernedInfo"].toArray();
-    QJsonArray array;
+    //笔记素材信息
+    nlohmann::json picPath;
+    QHash<QString,QPixmap> allPics;
+    for(int j=0;j<jottingInfo["materials"].size();j++){
+        //确定路径
+        string picId = jottingInfo["materials"][j]["picId"];
+        string picNewPath = "image://photos/"+picId;
 
-//    QVector<QPixmap> interestAvatorVec;
-//    for(int i=0;i<interestsArray.size();i++){
-//        QJsonObject jot_Obj = interestsArray[i].toObject();
-//        string imgId = personInfo["jottings"][i]["material_firstPath"]["picId"];
-//        string data = base64_decode(personIfo["interests"][i]["avatar"]);
-//        QPixmap pixmap;
-//        pixmap.loadFromData((unsigned char *)data.data(),data.length());
-//        interestAvatorVec.push_back(pixmap);
-//        string avatarPath = "image://photos/relation"+ to_string(i);
-//        jot_Obj.insert("avatarPath",QString::fromStdString(avatarPath));
-//        jot_Obj.insert("file","qrc:/qml/qml/PersonalPage.qml");
-//        array.append(QJsonValue(jot_Obj));
-//    }
-//    imageProvider->setHashPixmaps(interestAvatorVec);
+        //图片解码
+        QPixmap newpixmap;
+        std::string picData=base64_decode(jottingInfo["materials"][j]["picContent"]);
+        newpixmap.loadFromData((unsigned char *)picData.data(),picData.length());
 
-    qDebug()<<"关注者解析完成!........";
-    QJsonDocument jot_doc(array);
-    m_interest=QString(jot_doc.toJson(QJsonDocument::Indented));
+        picPath["path"] = picNewPath;
 
+        jotting["picPath"].push_back(picPath);
+        allPics.insert(QString::fromStdString(picId),newpixmap);
+    }
+    imageProvider->setpushUIPics(allPics);
 
-//    //关注数据
-//    QJsonObject interest_json1;
-//    interest_json1.insert("nickName","Alice");
-//    interest_json1.insert("file","qrc:/qml/qml/PersonalPage.qml");
-//    QJsonObject interest_json2;
-//    interest_json2.insert("nickName","Susan");
-//    interest_json2.insert("file","qrc:/qml/qml/PersonalPage.qml");
-//    QJsonObject interest_json3;
-//    interest_json3.insert("nickName","Mark");
-//    interest_json3.insert("file","qrc:/qml/qml/PersonalPage.qml");
-//    QJsonArray interest;
-//    interest.append(QJsonValue(interest_json1));
-//    interest.append(QJsonValue(interest_json2));
-//    interest.append(QJsonValue(interest_json3));
-//    m_interest_count=QString::number(interest.count());
-//    QJsonDocument interest_doc(interest);
-//    m_interest=QString(interest_doc.toJson(QJsonDocument::Indented));
+    //笔记评论信息
+    QHash<QString,QPixmap> avatars;
+    for(auto &com:jottingInfo["comment"]){
+        nlohmann::json comment;
+        comment["netizenName"] = com["netizen"]["nickName"];
+        comment["content"] = com["content"];
+        comment["time"] = com["time"];
+        //笔记作者头像信息
+        std::string avatarId = com["netizen"]["avatarId"];
+        string avatarPath = "image://photos/"+avatarId;
+        std::string avatarData=base64_decode(com["netizen"]["avatar"]);
+        QPixmap pixmap;
+        pixmap.loadFromData((unsigned char *)avatarData.data(),avatarData.length());
+        avatars.insert(QString::fromStdString(avatarId),pixmap);
+        comment["pic"]=avatarPath;
+        jotting["comment"].push_back(comment);
+    }
 
-//    qDebug()<<m_interest;
+    m_jotting=QString::fromStdString(jotting.dump());
 
-    //粉丝数据
-    QJsonObject fan_json1;
-    fan_json1.insert("nickName","Alice");
-    fan_json1.insert("file","qrc:/qml/qml/PersonalPage.qml");
-    QJsonObject fan_json2;
-    fan_json2.insert("nickName","Joey");
-    fan_json2.insert("file","qrc:/qml/qml/PersonalPage.qml");
-    QJsonObject fan_json3;
-    fan_json3.insert("nickName","Lay");
-    fan_json3.insert("file","qrc:/qml/qml/PersonalPage.qml");
-    QJsonArray fans;
-    fans.append(QJsonValue(fan_json1));
-    fans.append(QJsonValue(fan_json2));
-    fans.append(QJsonValue(fan_json3));
-    m_fan_count=QString::number(fans.count());
-    QJsonDocument fan_doc(fans);
-    m_fans=QString(fan_doc.toJson(QJsonDocument::Indented));
-
-    delete []receiveData;
-
+    cout<<"==============笔记的详细信息：=============="<<endl;
+    cout<<m_jotting.toStdString();
 }
-
-

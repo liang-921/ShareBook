@@ -17,6 +17,38 @@ PushPageControl::PushPageControl(QObject *parent):
 
 void PushPageControl::pushRecommendJottings()
 {
+ /*
+    //发送请求获取网名id为~~~的昵称 和 头像
+    nlohmann::json message1 = {
+        {"id","1"},
+        {"request","GetPersonalNameAvatar"}
+    };
+    std::string sendData1 = message1.dump();
+    Client::getInstance()->reconnect();
+    Client::getInstance()->send(sendData1.c_str(),sendData1.length());
+    std::cout<<"Client"<<"客户端获取用户昵称和头像......"<<std::endl;
+    char *receiveData1 = new char[100000000];
+
+    Client::getInstance()->receive(receiveData1);
+
+    //获取到的网民基本信息 以 json形式
+    nlohmann::json personInfo = nlohmann::json::parse(receiveData1);
+    //        cout<<personInfo.dump(4)<<endl;
+
+    //获取头像信息
+    string avatarId = personInfo["avatarId"];
+    string path = "image://photos/"+ avatarId;
+
+     std::string avatarData=base64_decode(personInfo["avatar"]);
+     QPixmap newpixmap;
+     newpixmap.loadFromData((unsigned char *)avatarData.data(),avatarData.length());
+     imageProvider->setAvatar(newpixmap);
+
+     m_nickName = QString::fromStdString(personInfo["name"]);
+     m_avatar = QString::fromStdString(path);
+
+    */
+    //============================================================
     //发送请求 服务端推送笔记
     nlohmann::json message = {
         {"id","1"},
@@ -27,19 +59,31 @@ void PushPageControl::pushRecommendJottings()
     Client::getInstance()->send(sendData.c_str(),sendData.length());
     std::cout<<"Client"<<"客户端获取用户推送笔记的信息......"<<std::endl;
     char *receiveData = new char[10000000];
-
     Client::getInstance()->receive(receiveData);
 
     //获取到的网民基本信息 以 json形式
     nlohmann::json scanInfo = nlohmann::json::parse(receiveData);
-//    std::cout<<scanInfo.dump(4)<<std::endl;
+    std::cout<<scanInfo.dump(4)<<std::endl;
+
+    m_nickName = QString::fromStdString(scanInfo["nickName"]);
+
+    //获取头像信息
+    string avatarId = scanInfo["avatarId"];
+    string path = "image://photos/"+ avatarId;
+
+     std::string avatarData=base64_decode(scanInfo["avatar"]);
+     QPixmap newpixmap;
+     newpixmap.loadFromData((unsigned char *)avatarData.data(),avatarData.length());
+     imageProvider->setAvatar(newpixmap);
+
+    m_avatar = QString::fromStdString(path);
 
     json receiveJottings;
     //浏览的笔记的信息是一个大数组
     QHash<QString,QPixmap> avatars;
 
     QHash<QString,QPixmap> allPics;
-    for(auto &info:scanInfo){
+    for(auto &info:scanInfo["jottings"]){
         json jotting;
 
         //笔记id
@@ -78,11 +122,6 @@ void PushPageControl::pushRecommendJottings()
             jotting["picPath"].push_back(picPath);
             allPics.insert(QString::fromStdString(picId),newpixmap);
         }
-
-//        json picPath1;
-//        picPath1["path"]="qrc:/images/images/avatar.png";
-//        jotting["picPath"]={picPath1,picPath1,picPath1};
-
         receiveJottings["jottings"].push_back(jotting);
     }
     imageProvider->setpushUIAvatars(avatars);
@@ -96,7 +135,7 @@ void PushPageControl::pushRecommendJottings()
 }
 
 void PushPageControl::pushConcernedJottings()
-{   
+{
     json jot_json1;
     jot_json1["avatar"]="qrc:/images/images/avatar.png";
     jot_json1["nickName"]="Baby";
@@ -120,7 +159,7 @@ void PushPageControl::pushConcernedJottings()
 }
 
 void PushPageControl::pushLocalJottings()
-{   
+{
     json jot_json1;
     jot_json1["avatar"]="qrc:/images/images/avatar.png";
     jot_json1["nickName"]="Baby";
@@ -144,15 +183,33 @@ void PushPageControl::pushLocalJottings()
     m_localJottings=QString::fromStdString(jottings.dump());
 }
 
+void PushPageControl::commentJotting(QString text,QString jottingId)
+{
+    nlohmann::json message = {
+        {"id","1"},
+        {"jottingId",jottingId.toStdString()},
+        {"text",text.toStdString()},
+        {"request","Comment"}
+    };
+
+    std::string sendData = message.dump();
+    Client::getInstance()->reconnect();
+    Client::getInstance()->send(sendData.c_str(),sendData.length());
+    std::cout<<"Client"<<"客户端发送评论到服务器成功！......"<<std::endl;
+
+}
+
 void PushPageControl::receiveOneJotting(QString jotting_id)
 {
 
     qDebug()<<"进来函数： PushPageControl::receiveOneJotting";
     json jotting;
+    string id = jotting_id.toStdString();
     json recommendJottings = nlohmann::json::parse(m_recommendJottings.toStdString());
 //    std::cout<<recommendJottings["jottings"].dump(4)<<std::endl;
     for(auto &jot:recommendJottings["jottings"]){
-        if(jot["id"] == jotting_id.toStdString()){
+        if(jot["id"] == id){
+            jotting["id"] = id;
             jotting["avatar"] = jot["avatarPath"];
             jotting["netizenName"] = jot["nickName"];
             jotting["picPath"] = jot["picPath"];
@@ -163,7 +220,7 @@ void PushPageControl::receiveOneJotting(QString jotting_id)
     //要传入的笔记的详情信息
 //    std::cout<<jotting.dump(4)<<std::endl;
 
-    string id = jotting_id.toStdString();
+
     //发送请求 服务端推送客户端确认的某篇笔记的详细信息
     nlohmann::json message = {
         {"id","1"},
@@ -202,33 +259,30 @@ void PushPageControl::receiveOneJotting(QString jotting_id)
 
     imageProvider->setDetailUIAvatars(avatars);
 
-//    jotting["avatar"]="qrc:/images/images/avatar.png";
-//    jotting["netizenName"]="NULL";
-//    jotting["content"]="Hello";
-//    jotting["likeCount"]="0";
-//    jotting["collectCount"]="0";
-//    jotting["commentCount"]="0";
-//    jotting["time"]="0000-00-00 00:00";
-
-//    json picPath;
-//    picPath["path"]="qrc:/images/images/avatar.png";
-//    jotting["picPath"]={picPath,picPath,picPath};
-
-//    json commend_1;
-//    commend_1["netizenName"]="Joey";
-//    commend_1["pic"]="qrc:/images/images/avatar.png";
-//    commend_1["content"]="very good!";
-//    commend_1["time"]="2022-06-01 22:12";
-//    json commend_2;
-//    commend_2["netizenName"]="Kacy";
-//    commend_2["pic"]="qrc:/images/images/avatar.png";
-//    commend_2["content"]="I like it!";
-//    commend_2["time"]="2022-06-01 14:12";
-//    jotting["commend"]={commend_1,commend_2};
-
     m_jotting=QString::fromStdString(jotting.dump());
 }
 
+void PushPageControl::setNickName(const QString &nickName)
+{
+    m_nickName=nickName;
+}
+
+QString PushPageControl::getNickName() const
+{
+    return m_nickName;
+}
+
+
+void PushPageControl::setAvatar(const QString &avatar)
+{
+    m_avatar=avatar;
+    emit avatarChanged(m_avatar);
+}
+
+QString PushPageControl::getAvatar() const
+{
+    return m_avatar;
+}
 void PushPageControl::setRecommendJottings(const QString &recommendJottings)
 {
     m_recommendJottings=recommendJottings;

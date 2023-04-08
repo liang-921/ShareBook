@@ -2,7 +2,6 @@ import QtQuick 2.0
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick
-import UIControl 1.0
 import Qt5Compat.GraphicalEffects
 
 Item {
@@ -10,7 +9,7 @@ Item {
 
     readonly property int rootWidth: personalRelationList.width
     readonly property int rootHeight: personalRelationList.height
-    readonly property url personalPage: "qrc:/qml/qml/PersonalPage.qml"
+    readonly property url personalPage: "PersonalPage.qml"
 
     property string ownName:"NULL"
     property string dataType:"interest"
@@ -52,6 +51,7 @@ Item {
         flat: true
         icon.color: "transparent"
         onClicked: {
+            bottom_button.visible = true
             loader.source=personalPage_loader
         }
     }
@@ -260,6 +260,7 @@ Item {
                             id: _image
                             smooth: true
                             visible: false
+//                            source: "qrc:/images/images/headpic.png"
                             anchors.fill: parent
                             source: jsonData[index].avatarPath
                             sourceSize: Qt.size(parent.size, parent.size)
@@ -325,5 +326,4 @@ Item {
             delegate: relationComponent
         }
     }
-
 }

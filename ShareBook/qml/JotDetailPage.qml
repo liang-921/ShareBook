@@ -16,6 +16,13 @@ Item {
 
     property var temp: jottingInfo.comment
 
+    property var netizenName: pushJottings.nickName
+    property var netizenAvatar: pushJottings.avatar
+
+//    PushPage{
+//        id:personalPage
+//        visible: false
+//    }
 
     Rectangle{
         id:netizen_info
@@ -48,8 +55,10 @@ Item {
                     loader.setSource(publishPage_loader,{"materialData":jottingInfo.picPath,"content_property":jottingInfo.content})
                 }else if(type=="push"){
                     loader.source=pushPage_loader
+                    bottom_button.visible = true
                 }else if(type=="self"){
                     loader.source=personalPage_loader
+                    bottom_button.visible = true
                 }
             }
         }
@@ -100,10 +109,6 @@ Item {
             anchors.leftMargin: rootWidth*0.03
             anchors.verticalCenter: parent.verticalCenter
         }
-//        Item{
-//            width: rootWidth*0.15
-//            height: concern_button_text.height
-//        }
 
 
         Button{
@@ -163,7 +168,7 @@ Item {
         id:jotting_content
         anchors.top: seperator_line_1.bottom
         anchors.topMargin: rootWidth*0.01
-        anchors.bottom: mark_banner.top
+//        anchors.bottom: mark_banner.top
         width: rootWidth
         contentWidth:rootWidth
         contentHeight:image_area.height+indicator.height+content.height+time.height+comment_count.height+rootHeight*0.2+commentListView.contentHeight
@@ -287,97 +292,120 @@ Item {
         }
     }
 
-    Row{
-        id:mark_banner
+    Rectangle{
         width: rootWidth
         height: rootHeight*0.05
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.margins: rootWidth*0.02
-        topPadding:rootWidth*0.01
-        spacing: rootWidth*0.04
-        Rectangle{
-            width: rootWidth*0.35
-            height: rootHeight*0.05
-            radius: 45
-            color:"grey"
-            Row{
-                anchors.centerIn: parent
-                IconImage{
-                    width:rootWidth*0.1
-                    height:width
-                    source: "qrc:/images/images/comment.png"
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                Text{
-                    text: qsTr("发布评论")
-                    font.pixelSize: 22
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                TapHandler{
-                    onTapped: {
-                        if(type!=="preview"){
-                            jotDetailPage.showComment(edit_comment)
+//        topPadding:rootWidth*0.01
+//        color:"red"
+//        z:3
+        Row{
+            id:mark_banner
+
+            spacing: rootWidth*0.04
+            Rectangle{
+                width: rootWidth*0.35
+                height: rootHeight*0.05
+                radius: 45
+                color:"#DCDCDC"
+                Row{
+                    anchors.centerIn: parent
+                    IconImage{
+//                        width:rootWidth*0.1
+//                        height:width
+                        sourceSize: Qt.size(28, 28)
+                        source: "qrc:/images/images/comment.png"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text{
+                        text: qsTr("发布评论")
+                        font.pixelSize: 22
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    TapHandler{
+                        onTapped: {
+                            if(type!=="preview"){
+                                jotDetailPage.showComment(edit_comment)
+                            }
                         }
                     }
                 }
             }
-        }
-        Row{
-            id:like_banner
-            Button{
-                id: like_button_banner
-                icon.source: "qrc:/images/images/like.png"
-                icon.width: rootWidth*0.1
-                icon.height: rootWidth*0.1
-                width: icon.width
-                height: icon.height
-                flat: true
-                anchors.verticalCenter: parent.verticalCenter
+//            Item{
+//                width: rootWidth*0.1
+//                height: rootHeight*0.05
+//            }
+
+            Row{
+                id:like_banner
+                Button{
+                    id: like_button_banner
+                    width: rootWidth*0.1
+                    height: rootWidth*0.1
+                    Image {
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        anchors.verticalCenter: parent.verticalCenter;
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(25, 25)
+                        source:"qrc:/images/images/like.png"
+                    }
+                    flat: true
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Text{
+                    id:like_count_banner
+                    width: rootWidth*0.05
+                    text: qsTr(jottingInfo.likeCount)
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
-            Text{
-                id:like_count_banner
-                width: rootWidth*0.05
-                text: qsTr(jottingInfo.likeCount)
-                anchors.verticalCenter: parent.verticalCenter
+            Row{
+                id:collect_banner
+                Button{
+                    id: collect_button_banner
+                    width: rootWidth*0.1
+                    height: rootWidth*0.1
+                    Image {
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        anchors.verticalCenter: parent.verticalCenter;
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(25, 25)
+                        source:"qrc:/images/images/collect.png"
+                    }
+                    flat: true
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Text{
+                    id:collect_count_banner
+                    width: rootWidth*0.05
+                    text: qsTr(jottingInfo.collectCount)
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
-        }
-        Row{
-            id:collect_banner
-            Button{
-                id: collect_button_banner
-                icon.source: "qrc:/images/images/collect.png"
-                icon.width: rootWidth*0.1
-                icon.height: rootWidth*0.1
-                width: icon.width
-                height: icon.height
-                flat: true
-                anchors.verticalCenter: parent.verticalCenter
-            }
-            Text{
-                id:collect_count_banner
-                width: rootWidth*0.05
-                text: qsTr(jottingInfo.collectCount)
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-        Row{
-            id:comment_banner
-            Button{
-                id: comment_button_banner
-                icon.source: "qrc:/images/images/comment.png"
-                icon.width: rootWidth*0.1
-                icon.height: rootWidth*0.1
-                width: icon.width
-                height: icon.height
-                flat: true
-                anchors.verticalCenter: parent.verticalCenter
-            }
-            Text{
-                id:comment_count_banner
-                width: rootWidth*0.05
-                text: qsTr(jottingInfo.commentCount)
-                anchors.verticalCenter: parent.verticalCenter
+            Row{
+                id:comment_banner
+                Button{
+                    id: comment_button_banner
+                    width: rootWidth*0.1
+                    height: rootWidth*0.1
+                    Image {
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        anchors.verticalCenter: parent.verticalCenter;
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(25, 25)
+                        source:"qrc:/images/images/comment.png"
+                    }
+                    flat: true
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Text{
+                    id:comment_count_banner
+                    width: rootWidth*0.05
+                    text: qsTr(jottingInfo.commentCount)
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
         }
     }
@@ -456,7 +484,17 @@ Item {
                             toast.show("请填写内容再发送!")
                             toast.anchors.bottomMargin=rootWindow.height*0.1
                         }else{
-                            jottingInfo.comment.push({"netizenName":netizen.nikeName,"pic":"qrc:/images/images/avatar.png","content":comment_edit.text,"time":"2022-06-01 14:12"})
+//                            netizen.getNickName()
+                            console.log("评论的笔记的ID :" +jottingInfo.id +
+                                        "\n评论的人是： "+ netizen.nikeName +
+                                        "\n评论者头像是： "+ netizen.avatar +
+                                        "\n评论的内容是： " +comment_edit.text)
+
+                            jottingInfo.comment.push({"netizenName":netizenName,
+                                                      "pic":netizenAvatar,
+                                                      "content":comment_edit.text,
+                                                      "time":"2022-06-01 14:12"})
+                            pushJottings.commentJotting(comment_edit.text,jottingInfo.id)
                             commentListView.model=jottingInfo.comment
                             commentListView.update()
                             comment_pop.close()

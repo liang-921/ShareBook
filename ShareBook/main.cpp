@@ -9,23 +9,20 @@
 #include "publishpagecontrol.h"
 
 ImageProvider *imageProvider = nullptr;
-
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
-    QGuiApplication app(argc, argv);
-
     qmlRegisterType<PersonalUIControl>("UIControl",1,0,"PersonalUIControl");
-    qmlRegisterType<RoundImage>("UIControl",1,0,"RoundImage");
     qmlRegisterType<PushPageControl>("UIControl",1,0,"PushPageControl");
     qmlRegisterType<PublishPageControl>("UIControl",1,0,"PublishPageControl");
 
 
-    QQmlApplicationEngine engine;
+    QGuiApplication app(argc, argv);
 
-    const QUrl url(u"qrc:/ShareBook/main.qml"_qs);
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/ShareBook/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

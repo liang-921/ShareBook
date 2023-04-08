@@ -13,7 +13,7 @@
 
 #define SERV_PORT 9877
 #define INFTIM -1 //poll永远等待
-#define MAXLINE 1024
+#define MAXLINE 9999999
 #define INVALID_SOCKET_FD -1
 
 using json = nlohmann::json;
@@ -184,4 +184,28 @@ int Network::closeSocket()
         return -1;
     }
     return 0;
+}
+
+std::string Network::receiveFile()
+{
+    char buf[MAXLINE];
+    memset(buf,0,sizeof(buf));
+    int n=recv(m_sockfd,buf,sizeof(buf),0);
+    std::cout<<"receive size:"<<n;
+    std::cout<<buf;
+    if( n == -1){
+        if(errno == ECONNRESET || errno == EWOULDBLOCK || errno == EINTR || errno == EAGAIN){
+            printf("Client read error. Errorn info: %d %s\n",errno,strerror(errno));
+        }
+        return nullptr;
+    }else if(n==0){
+        printf("The opposite end has closed the socket.\n");
+        return nullptr;
+    }
+    std::string s(buf);
+    if(s.empty()){
+        std::cerr<<"Network: Client receieve null"<<std::endl;
+        return nullptr;
+    };
+    return s;
 }

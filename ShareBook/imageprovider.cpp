@@ -1,4 +1,6 @@
 #include "imageprovider.h"
+#include "base64.h"
+#include "client.h"
 
 ImageProvider::ImageProvider()
     :QQuickImageProvider(QQuickImageProvider::Pixmap)
@@ -9,7 +11,7 @@ QPixmap ImageProvider::requestPixmap(const QString &id, QSize *size, const QSize
 {
     Q_UNUSED(requestedSize)
     Q_UNUSED(size)
-//    if (size)   *size = m_avatar.size();
+    if (size)   *size = m_avatar.size();
     if(id=="avatar"){
         qDebug()<<"头像";
         return m_avatar;
@@ -28,7 +30,32 @@ QPixmap ImageProvider::requestPixmap(const QString &id, QSize *size, const QSize
     }
 
     return QPixmap();
+
+//    return getPicture(id.toStdString());
 }
+
+QPixmap ImageProvider::getPicture(std::string path)
+{
+    qDebug()<<QString::fromStdString(path);
+    nlohmann::json message{
+        {"id","1"},
+        {"request","GetPicture"},
+        {"picPath",path}
+    };
+
+    std::string mes = message.dump(4);
+    Client::getInstance()->reconnect();
+    Client::getInstance()->send(mes.c_str(),message.size());
+    char *pic = new char[9999999];
+    Client::getInstance()->receive(pic);
+    std::string photo=base64_decode(pic);
+
+    QPixmap pixmap;
+    pixmap.loadFromData((const unsigned char*)photo.c_str(),photo.size(),nullptr);
+    delete []pic;
+    return pixmap;
+}
+
 
 void ImageProvider::setAvatar(const QPixmap &newPixmap)
 {
@@ -64,6 +91,8 @@ void ImageProvider::setDetailUIAvatars(const QHash<QString, QPixmap> &newPixmaps
 {
     m_detailUIAvatars = newPixmaps;
 }
+
+
 
 
 
