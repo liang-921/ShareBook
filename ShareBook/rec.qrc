@@ -32,5 +32,8 @@
         <file>images/messageIng.png</file>
         <file>images/vedioIng.png</file>
         <file>images/vedio.png</file>
+        <file>images/save.png</file>
+        <file>images/addPic.png</file>
+        <file>images/tishi.png</file>
     </qresource>
 </RCC>

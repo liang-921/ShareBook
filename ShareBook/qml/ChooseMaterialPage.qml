@@ -1,274 +1,268 @@
 import QtQuick 2.0
-import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-
+import QtMultimedia 5.8
+import QtCore
+import UIControl 1.0
 Item {
     id:chooseMaterialPage
 
     readonly property int rootWidth: chooseMaterialPage.width
     readonly property int rootHeight: chooseMaterialPage.height
-//    property var selectMaterialItem: []
     property var selectMaterialData: []
     property int materialCount: 0
 
-    function resortMaterial(cancel_text){
-        selectMaterialData.splice(parseInt(cancel_text)-1,1)
-        var count=0
-        for(var i=0;i<materialData.length;i++){
-            if(count===materialCount) break;
-            if(materialData[i].order!==""){
-                ++count
-                if(parseInt(materialData[i].order)>parseInt(cancel_text)){
-                    materialData[i].order=""+(parseInt(materialData[i].order)-1)
-                }
+    FileOpenDialog {
+        id: openFile
+        title: "Open file"
+        nameFilters: ["Images (*.png *.jpg *.jpeg)", /*"Documents (*.doc *.docx)"*/, "Videos (*.mp4)","All files (*)"]
+        selectMultiple:  true
+        onAccepted: {
+//            outputOpenFile.text = "File selected: " + openFile.fileUrl
+            for(var i=0;i<openFile.fileUrls.length;i++){
+                var data = {"path":openFile.fileUrls[i]};
+                filesModel.append(data)
+
             }
+            picListView.model = filesModel
         }
-        materialsListView.model=materialData
-        materialsListView.update()
-    }
-
-    function changePrimeStyle(){
-        if(materialCount>0){
-            material_count_border.color="white"
-            material_count_border.border.color="black"
-            material_count_border.border.width=1
-        }else{
-            material_count_border.color="grey"
-            material_count_border.border.color="#ffffff"
-            material_count_border.border.width=0
-        }
-    }
-
-    Button{
-        id:backButton
-        icon.source: "qrc:/images/images/backbutton.png"
-        icon.width: rootWidth*0.1
-        icon.height: rootWidth*0.1
-        width: icon.width
-        height: icon.height
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.margins: rootWidth*0.02
-        flat: true
-        onClicked: {
-            loader.source=pushPage_loader
-        }
-    }
-
-    Text{
-        id:netizen_name
-        text:qsTr("选择素材")
-        anchors.top:parent.top
-        anchors.topMargin: rootWidth*0.02
-        anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: 30
-        font.bold: true
+        onRejected: outputOpenFile.text = "File selected: –"
     }
 
     Rectangle{
-        id:material_count_border
-        radius: 45
-//        color: "grey"
-        width: rootWidth*0.15
-        height: rootHeight*0.04
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.margins: rootWidth*0.03
-        Text {
-            id:material_count
-            anchors.centerIn: parent
-            text: qsTr("Finish")
-        }
-        TapHandler{
-            onTapped: {
-                if(materialCount>0){
-                    loader.setSource(publishPage_loader,{"materialPath":selectMaterialData})
-                }else{
-                    toast.show("Please choose materials")
-                }
-            }
-        }
-        Component.onCompleted: {
-            changePrimeStyle()
-        }
-    }
-
-    Rectangle{
-        id:seperator_line_1
-        width: parent.width
-        height: 1
-        color: "#000000"
-        anchors.top: netizen_name.bottom
-        anchors.topMargin: parent.width*0.05
-    }
-
-    Row{
-        id:banner
-        spacing: parent.width*0.25
-        anchors.top: seperator_line_1.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        ColumnLayout{
-            id:all
-            Text{
-                font.italic: true
-                font.bold: true
-                font.pixelSize: 30
-                Layout.alignment: Qt.AlignHCenter
-                text: qsTr("全部")
-            }
-            Rectangle{
-                id:rect_all
-                width: 30
-                height: 5
-                radius: 5
-                color: "#000000"
-                visible: true
-                Layout.alignment: Qt.AlignHCenter
-            }
-            TapHandler{
-                onTapped: {
-                    rect_all.visible=true
-                    rect_photo.visible=false
-                    rect_video.visible=false
-                }
-            }
-        }
-        ColumnLayout{
-            id:photo
-            Text{
-                font.italic: true
-                font.bold: true
-                font.pixelSize: 30
-                Layout.alignment: Qt.AlignHCenter
-                text: qsTr("照片")
-            }
-            Rectangle{
-                id:rect_photo
-                width: 30
-                height: 5
-                radius: 5
-                color: "#000000"
-                visible: false
-                Layout.alignment: Qt.AlignHCenter
-            }
-            TapHandler{
-                onTapped: {
-                    rect_all.visible=false
-                    rect_photo.visible=true
-                    rect_video.visible=false
-                }
-            }
-        }
-        ColumnLayout{
-            id:video
-            Text{
-                font.italic: true
-                font.bold: true
-                font.pixelSize: 30
-                Layout.alignment: Qt.AlignHCenter
-                text: qsTr("视频")
-            }
-            Rectangle{
-                id:rect_video
-                width: 30
-                height: 5
-                radius: 5
-                color: "#000000"
-                visible:false
-                Layout.alignment: Qt.AlignHCenter
-            }
-            TapHandler{
-                onTapped: {
-                    rect_all.visible=false
-                    rect_photo.visible=false
-                    rect_video.visible=true
-                }
-            }
-        }
-    }
-
-    Rectangle{
-        id:seperator_line_2
-        width: parent.width
-        height: 1
-        color: "#000000"
-        anchors.top: banner.bottom
-        anchors.topMargin: parent.width*0.02
-    }
-
-    ScrollView{
+        id:topRec
         width:rootWidth
-        height: rootHeight*0.2+materialsListView.height
-        anchors.top: seperator_line_2.bottom
+        height:rootWidth*0.12
         anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.topMargin: rootWidth*0.02
-        anchors.leftMargin: rootWidth*0.03
-        anchors.bottomMargin: rootWidth*0.02
-        Component{
-            id:materialComponent
-            Rectangle{
-                id: jot
-                width:rootWidth*0.3
-                height: width
-                border.color: "#000000"
-                border.width:1
-                radius: 5
-                Image{
-                    width:parent.width
-                    height: parent.height
-                    source: materialData[index].path
-                    Rectangle{
-                        radius: 90
-                        width: parent.width*0.2
-                        height: width
-                        border.width: 1
-                        border.color: "grey"
-                        anchors.top: parent.top
-                        anchors.right: parent.right
-                        anchors.margins: parent.width*0.02
-                        Text{
-                            id:num_material
-                            anchors.centerIn: parent
-                            text: qsTr(materialData[index].order)
-                        }
-                    }
-                }
 
-                TapHandler{
-                    onTapped: {
-                        if(!materialData[index].isSelected){
-                            if(materialCount<9){
-                                materialData[index].isSelected=true
-                                materialData[index].order=""+(++materialCount)
-                                num_material.text=qsTr(""+materialCount)
-                                selectMaterialData.push({"path":materialData[index].path})
-                            }else{
-                                toast.show("Can't choose anymore")
-                            }
-                        }else{
-                            --materialCount
-                            materialData[index].isSelected=false
-                            materialData[index].order=""
-                            resortMaterial(num_material.text)
-                            num_material.text=qsTr("")
-                        }
-                        changePrimeStyle()
-                    }
-                }
+        anchors.top: parent.top
+        anchors.topMargin: rootWidth*0.02
+
+        Button{
+            id:backButton
+            width: rootWidth*0.06
+            height: rootWidth*0.06
+            anchors.left: parent.left
+            anchors.leftMargin: rootWidth*0.02
+            anchors.verticalCenter: parent.verticalCenter
+            Image {
+                id: backImg
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                sourceSize: Qt.size(30, 30)
+                source:"qrc:/images/images/backbutton.png"
+            }
+
+            flat: true
+            icon.color: "transparent"
+            onClicked: {
+                loader.source=pushPage_loader
+                bottom_button.visible = true
             }
         }
 
-        GridView {
-            id: materialsListView
-            width: rootWidth
-            height: rootHeight
-            cellWidth: rootWidth*0.32
-            cellHeight: cellWidth
-            model: materialData
-            delegate: materialComponent
-            clip: true
+
+        Button{
+            id: concern_button
+            anchors.left: backButton.right
+            anchors.leftMargin:  rootWidth*0.8
+            anchors.right: parent.right
+            anchors.rightMargin: rootWidth*0.02
+            width: rootWidth*0.06
+            height: rootWidth*0.06
+            flat: true
+            icon.color: "transparent"
+            anchors.verticalCenter: parent.verticalCenter
+            Image {
+                id: tishiImg
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                sourceSize: Qt.size(30, 30)
+                source:"qrc:/images/images/tishi.png"
+            }
+            onClicked: {
+                console.log("提示被点击！")
+            }
         }
     }
+
+
+    Component{
+        id:imgDelegate
+        Rectangle{
+            width: 120
+            height:120
+//            color: "red"
+            Image{
+//                fillMode: Image.PreserveAspectFit
+                anchors.fill: parent
+                source: path
+            }
+        }
+    }
+
+
+    GridView{
+        id: picListView
+        width: rootWidth
+        height: rootWidth/3
+        anchors.top: topRec.bottom
+        anchors.topMargin: rootWidth*0.02
+        anchors.right: parent.right
+        anchors.rightMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        ListModel{
+            id:filesModel
+        }
+        clip: true
+        flow: GridView.FlowTopToBottom
+        cellWidth: 130
+        cellHeight: 130
+        delegate: imgDelegate
+    }
+
+    Button {
+        id:openBtn
+        anchors.top: picListView.bottom
+        anchors.topMargin: rootWidth*0.02
+        width:60
+        height:60
+        background: Rectangle{
+            color:"transparent"
+        }
+        Image {
+            id: addImg
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
+            sourceSize: Qt.size(30, 30)
+            source:"qrc:/images/images/addPic.png"
+        }
+        onClicked: { openFile.open(); }
+    }
+
+    Rectangle{
+        id:speRec
+        width: rootWidth
+        height:1
+        anchors.top: openBtn.bottom
+        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        anchors.right: parent.right
+        anchors.rightMargin: rootWidth*0.02
+        color: "#D3D3D3"
+    }
+
+    Rectangle{
+        id:editRec
+        width: rootWidth
+        height:120
+        anchors.top: speRec.bottom
+        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        anchors.right: parent.right
+        anchors.rightMargin: rootWidth*0.02
+        TextArea{
+            id:edit
+            anchors.fill: parent
+            overwriteMode: true
+            background: Rectangle{
+                color:"transparent"
+            }
+
+
+            placeholderText:"这一刻的想法..."
+        }
+
+    }
+
+    Rectangle{
+        id:speRec2
+        width: rootWidth
+        height:1
+        anchors.top: editRec.bottom
+        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        anchors.right: parent.right
+        anchors.rightMargin: rootWidth*0.02
+        color: "#D3D3D3"
+    }
+
+
+    Rectangle{
+        id:bottomRec
+        width: rootWidth
+        height:60
+//        anchors.top: speRec2.bottom
+//        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        anchors.right: parent.right
+        anchors.rightMargin: rootWidth*0.02
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: rootWidth*0.02
+//        color: "#D3D3D3"
+        Button {
+            id: saveBtn
+            anchors.left: parent.left
+            width:40
+            height:40
+            anchors.verticalCenter:parent.verticalCenter
+            background: Rectangle{
+                color: "white"
+                opacity: 0.7
+            }
+
+            ColumnLayout{
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 1
+                Image {
+                    id: saveImg
+                    width: 30
+                    height: 30
+                    fillMode: Image.PreserveAspectFit
+                    sourceSize: Qt.size(30, 30)
+                    source:"qrc:/images/images/save.png"
+                }
+                Text {
+                    id:saveText
+                    text: qsTr("存草稿")
+                    Layout.alignment: Qt.AlignHCenter
+                    font.pointSize: 12
+                }
+            }
+
+            onClicked: {console.log("存草稿被点击啦！") }
+        }
+
+        Button{
+            id:publish
+            anchors.left: saveBtn.right
+            anchors.leftMargin: rootWidth*0.02
+            anchors.right: parent.right
+            anchors.rightMargin: rootWidth*0.02
+            anchors.verticalCenter:parent.verticalCenter
+            width:90
+            height:60
+            background: Rectangle{
+                radius: 30
+                color: 	"#EE0000"
+            }
+            text: "发布笔记"
+            onClicked: {
+                openFile.publishJotting(edit.text)
+                console.log("发布笔记点击啦！")
+            }
+            font{
+                pixelSize: 20
+            }
+        }
+
+
+    }
+
 }

@@ -160,6 +160,7 @@ QJsonObject transition(nlohmann::json js)
 
 void PersonalUIControl::initData()
 {
+
 //    发送请求获取网名id为~~~的相关数据
     nlohmann::json message = {
         {"id","1"},
@@ -169,7 +170,7 @@ void PersonalUIControl::initData()
     Client::getInstance()->reconnect();
     Client::getInstance()->send(sendData.c_str(),sendData.length());
     std::cout<<"Client"<<"客户端初始化用户信息......"<<std::endl;
-    char *receiveData = new char[100000000];
+    char *receiveData = new char[9999999];
 
     Client::getInstance()->receive(receiveData);
 

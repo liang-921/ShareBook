@@ -17,39 +17,7 @@ PushPageControl::PushPageControl(QObject *parent):
 
 void PushPageControl::pushRecommendJottings()
 {
- /*
-    //发送请求获取网名id为~~~的昵称 和 头像
-    nlohmann::json message1 = {
-        {"id","1"},
-        {"request","GetPersonalNameAvatar"}
-    };
-    std::string sendData1 = message1.dump();
-    Client::getInstance()->reconnect();
-    Client::getInstance()->send(sendData1.c_str(),sendData1.length());
-    std::cout<<"Client"<<"客户端获取用户昵称和头像......"<<std::endl;
-    char *receiveData1 = new char[100000000];
-
-    Client::getInstance()->receive(receiveData1);
-
-    //获取到的网民基本信息 以 json形式
-    nlohmann::json personInfo = nlohmann::json::parse(receiveData1);
-    //        cout<<personInfo.dump(4)<<endl;
-
-    //获取头像信息
-    string avatarId = personInfo["avatarId"];
-    string path = "image://photos/"+ avatarId;
-
-     std::string avatarData=base64_decode(personInfo["avatar"]);
-     QPixmap newpixmap;
-     newpixmap.loadFromData((unsigned char *)avatarData.data(),avatarData.length());
-     imageProvider->setAvatar(newpixmap);
-
-     m_nickName = QString::fromStdString(personInfo["name"]);
-     m_avatar = QString::fromStdString(path);
-
-    */
-    //============================================================
-    //发送请求 服务端推送笔记
+    //发送浏览笔记请求 请求服务端推送笔记
     nlohmann::json message = {
         {"id","1"},
         {"request","ScanJottings"}

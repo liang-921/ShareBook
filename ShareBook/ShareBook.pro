@@ -1,5 +1,7 @@
 QT += quick
-
+QT += core-private
+QT += gui-private
+QT += widgets
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
@@ -8,6 +10,8 @@ QT += quick
 SOURCES += \
         base64.cpp \
         client.cpp \
+    fileopendialog.cpp \
+    filesavedialog.cpp \
         imageprovider.cpp \
         main.cpp \
     messageuicontrol.cpp \
@@ -61,14 +65,22 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+
+include(qtquick2controlsapplicationviewer/qtquick2controlsapplicationviewer.pri)
+qtcAddDeployment()
+
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android_sources
 
 HEADERS += \
     base64.h \
     client.h \
+    fileopendialog.h \
+    filesavedialog.h \
     imageprovider.h \
     messageuicontrol.h \
     network.h \
     personaluicontrol.h \
     publishpagecontrol.h \
     pushpagecontrol.h \
+
+DEFINES += QT_NO_WARNING_OUTPUT

@@ -1,10 +1,10 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include "fileopendialog.h"
 #include "imageprovider.h"
 #include "personaluicontrol.h"
-#include "roundimage.h"
 #include "pushpagecontrol.h"
 #include "publishpagecontrol.h"
 
@@ -17,9 +17,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<PersonalUIControl>("UIControl",1,0,"PersonalUIControl");
     qmlRegisterType<PushPageControl>("UIControl",1,0,"PushPageControl");
     qmlRegisterType<PublishPageControl>("UIControl",1,0,"PublishPageControl");
+    qmlRegisterType<FileOpenDialog>("UIControl", 1, 0, "FileOpenDialog");
+//    qmlRegisterType<FileSaveDialog>("UIControl", 1, 0, "FileSaveDialog");
 
-
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/ShareBook/qml/main.qml"));

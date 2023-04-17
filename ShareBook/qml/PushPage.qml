@@ -173,9 +173,6 @@ Item {
                 id: jotting
                 width:rootWidth
                 height:rootHeight*0.5
-//                radius: 10
-//                border.color: "grey"
-//                border.width:1
 
                 Rectangle{
                     id:seperator_line_2
@@ -459,7 +456,6 @@ Item {
             anchors.fill: parent
             model: jottings
             delegate: jottingComponent
-//            spacing:rootHeight*0.01
         }
     }
 }

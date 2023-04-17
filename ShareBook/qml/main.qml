@@ -211,9 +211,8 @@ ApplicationWindow {
             }
             onClicked: {
                 loader.source = chooseMaterialPage_loader
-                bottom_button.z = -1
+                bottom_button.visible = false
                 console.log("加载 "+ loader.source)
-
             }
         }
 
