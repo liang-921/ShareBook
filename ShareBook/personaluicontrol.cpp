@@ -1,9 +1,10 @@
-//#include "boostclient.h"
+#include "personaluicontrol.h"
+
+#include "clientInfo.h"
 #include "client.h"
 #include "base64.h"
 #include "imageprovider.h"
 
-#include "personaluicontrol.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -163,7 +164,7 @@ void PersonalUIControl::initData()
 
 //    发送请求获取网名id为~~~的相关数据
     nlohmann::json message = {
-        {"id","1"},
+        {"id",ID},
         {"request","InitPersonalInfo"}
     };
     std::string sendData = message.dump();
@@ -299,7 +300,7 @@ void PersonalUIControl::getOneJottingDetail(QString jotting_id)
     string id = jotting_id.toStdString();
     //发送请求 服务端推送个人页面确认的某篇笔记的详细信息
     nlohmann::json message = {
-        {"id","1"},
+        {"id",ID},
         {"jottingId",id},
         {"request","GetInfoJottingDetail"}
     };

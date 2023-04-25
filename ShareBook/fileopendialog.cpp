@@ -1,9 +1,13 @@
 /* Copyright 2013–2017 Kullo GmbH. All rights reserved. */
 #include "fileopendialog.h"
+
+
+#include "client.h"
+#include "clientInfo.h"
+
 #include <QBuffer>
 #include <QApplication>
 #include <QDebug>
-#include "client.h"
 #include <QQuickWindow>
 
 FileOpenDialog::FileOpenDialog(QQuickItem *parent)
@@ -109,7 +113,7 @@ void FileOpenDialog::publishJotting(QString content)
     }
 
     nlohmann::json message{
-        {"id","1"},
+        {"id",ID},
         {"request","PublishJotting"},
         {"jotting",jottingData}
     };

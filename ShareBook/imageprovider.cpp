@@ -1,6 +1,9 @@
 #include "imageprovider.h"
+
+
 #include "base64.h"
 #include "client.h"
+#include "clientInfo.h"
 
 ImageProvider::ImageProvider()
     :QQuickImageProvider(QQuickImageProvider::Pixmap)
@@ -38,7 +41,7 @@ QPixmap ImageProvider::getPicture(std::string path)
 {
     qDebug()<<QString::fromStdString(path);
     nlohmann::json message{
-        {"id","1"},
+        {"id",ID},
         {"request","GetPicture"},
         {"picPath",path}
     };

@@ -12,6 +12,8 @@ Item {
     property var selectMaterialData: []
     property int materialCount: 0
 
+    property int value: 0
+
     FileOpenDialog {
         id: openFile
         title: "Open file"
@@ -32,13 +34,26 @@ Item {
     Popup {
         id: publishFinish
         anchors.centerIn: Overlay.overlay
-        Text {
-            id: publishFinishText
-            color: "red"
-            font.bold: true
+        background: Rectangle{
+            anchors.fill: parent
+            color:"transparent"
+        }
+        ProcessWidget{
+            id:processItem
+            value: publishPage.value
         }
     }
 
+    NumberAnimation {
+        id: na
+        target: publishPage
+        property: "value"
+        from: 0
+        to: 100
+        duration: 5000
+        loops: 1
+        running: true
+    }
     Rectangle{
         id:topRec
         width:rootWidth
@@ -265,19 +280,39 @@ Item {
             text: "发布笔记"
             onClicked: {
                 openFile.publishJotting(edit.text)
-                publishFinishText.text = "发布成功！"
+//                publishFinishText.text = "发布成功！"
                 publishFinish.open()
                 console.log("发布笔记点击啦！")
-
-                loader.source=pushPage_loader
-                bottom_button.visible = true
+                //进度条开始
+                na.start()
+                delayed_timer.setTimeout(function(){
+                    publishFinish.close()
+                    loader.source=pushPage_loader
+                    bottom_button.visible = true
+                },5000)
             }
             font{
                 pixelSize: 20
             }
         }
 
+        Timer{//延迟定时器
+            id:delayed_timer
 
+            //延迟指定函数的执行
+            function setTimeout(cb, delayTime) {
+                //console.log("delayed_timer.setTimeout.cb = ",cb.name,delayTime)
+                delayed_timer.interval = delayTime
+                delayed_timer.repeat = false
+                delayed_timer.triggered.connect(cb)
+                delayed_timer.triggered.connect(function release () {
+                    //console.log("release",cb.name,delayTime,Date.now()/1000.0)
+                    delayed_timer.triggered.disconnect(cb)
+                    delayed_timer.triggered.disconnect(release)
+                })
+                delayed_timer.start()
+            }
+        }
     }
 
 }

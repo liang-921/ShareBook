@@ -18,6 +18,7 @@ Item {
 
     property var netizenName: pushJottings.nickName
     property var netizenAvatar: pushJottings.avatar
+    property int commentCnt: jottingInfo.comment.length
 
 //    PushPage{
 //        id:personalPage
@@ -200,14 +201,17 @@ Item {
         }
         Text{
             id:content
+            width: rootWidth*0.9
             anchors.top: indicator.bottom
             anchors.left: parent.left
             anchors.margins: rootWidth*0.02
             text:qsTr(jottingInfo.content)
+            clip :true
             font.pixelSize: 22
-            wrapMode: Text.WordWrap
-            clip:true
+            color: "black"
+            wrapMode: Text.WrapAnywhere
             elide: Text.ElideRight
+            maximumLineCount:2
         }
 
         Text{
@@ -234,7 +238,7 @@ Item {
             anchors.top: seperator_line_2.bottom
             anchors.left: parent.left
             anchors.margins: rootWidth*0.02
-            text: qsTr("共"+jottingInfo.commentCount+"条评论")
+            text: qsTr("共 "+commentCnt +" 条评论")
             font.pixelSize: 18
             color: "grey"
         }
@@ -358,7 +362,8 @@ Item {
                 Text{
                     id:like_count_banner
                     width: rootWidth*0.05
-                    text: qsTr(jottingInfo.likeCount)
+                    text: "0"
+//                    text: qsTr(jottingInfo.likeCount)
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -381,7 +386,8 @@ Item {
                 Text{
                     id:collect_count_banner
                     width: rootWidth*0.05
-                    text: qsTr(jottingInfo.collectCount)
+                    text: "0"
+//                    text: qsTr(jottingInfo.collectCount)
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -404,7 +410,8 @@ Item {
                 Text{
                     id:comment_count_banner
                     width: rootWidth*0.05
-                    text: qsTr(jottingInfo.commentCount)
+//                    text: qsTr(jottingInfo.commentCount)
+                    text: "0"
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }

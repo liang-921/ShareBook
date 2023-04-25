@@ -2,8 +2,10 @@
 
 
 #include "client.h"
+#include "clientInfo.h"
 #include "base64.h"
 #include "imageprovider.h"
+
 #include <iostream>
 #include <ostream>
 #include <nlohmann/json.hpp>
@@ -20,7 +22,7 @@ VideoPageControl::VideoPageControl(QObject *parent):
 void VideoPageControl::pushRecommendVideos()
 {
     nlohmann::json message = {
-        {"id","1"},
+        {"id",ID},
         {"request","ScanVideos"}
     };
 

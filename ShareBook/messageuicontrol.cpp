@@ -1,11 +1,14 @@
 #include "messageuicontrol.h"
 
-#include <iostream>
-#include <nlohmann/json.hpp>
+
 #include "base64.h"
 #include "client.h"
+#include "clientInfo.h"
 #include "imageprovider.h"
 #include "qpixmap.h"
+
+#include <iostream>
+#include <nlohmann/json.hpp>
 
 using namespace std;
 using json = nlohmann::json;
@@ -21,7 +24,7 @@ void MessageUIControl::scanMessage()
     std::cout<<"进入函数scanMessage"<<std::endl;
     //发送浏览笔记请求 请求服务端推送笔记
     nlohmann::json message = {
-        {"id","3"},
+        {"id",ID},
         {"request","GetMessage"}
     };
 

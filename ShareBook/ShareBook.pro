@@ -30,6 +30,7 @@ resources.files = qml/main.qml \
                     qml/PushPage.qml \
                     qml/PersonalRelationList.qml \
                     qml/PublishPage.qml \
+                    qml/ProcessWidget.qml \
                     qml/Toast.qml \
                     qml/mediaplayer/AudioControl.qml \
                     qml/mediaplayer/PlaybackControl.qml \
@@ -51,6 +52,7 @@ DISTFILES += \
     qml/MessagePage.qml \
     qml/PersonalPage.qml \
     qml/PersonalRelationList.qml \
+    qml/ProcessWidget.qml \
     qml/PublishPage.qml \
     qml/PushPage.qml \
     qml/Toast.qml \
@@ -88,6 +90,7 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android_sources
 HEADERS += \
     base64.h \
     client.h \
+    clientInfo.h \
     fileopendialog.h \
     filesavedialog.h \
     imageprovider.h \

@@ -1,6 +1,7 @@
 #include "pushpagecontrol.h"
 
 #include "client.h"
+#include "clientInfo.h"
 #include "base64.h"
 #include "imageprovider.h"
 
@@ -19,7 +20,7 @@ void PushPageControl::pushRecommendJottings()
 {
     //发送浏览笔记请求 请求服务端推送笔记
     nlohmann::json message = {
-        {"id","1"},
+        {"id",ID},
         {"request","ScanJottings"}
     };
 
@@ -153,7 +154,7 @@ void PushPageControl::pushLocalJottings()
 void PushPageControl::commentJotting(QString text,QString jottingId)
 {
     nlohmann::json message = {
-        {"id","1"},
+        {"id",ID},
         {"jottingId",jottingId.toStdString()},
         {"text",text.toStdString()},
         {"request","Comment"}
@@ -181,6 +182,7 @@ void PushPageControl::receiveOneJotting(QString jotting_id)
             jotting["netizenName"] = jot["nickName"];
             jotting["picPath"] = jot["picPath"];
             jotting["time"] = jot["time"];
+            jotting["time"] = jot["content"];
         }
     }
 
@@ -190,7 +192,7 @@ void PushPageControl::receiveOneJotting(QString jotting_id)
 
     //发送请求 服务端推送客户端确认的某篇笔记的详细信息
     nlohmann::json message = {
-        {"id","1"},
+        {"id",ID},
         {"jottingId",id},
         {"request","GetJottingDetail"}
     };
