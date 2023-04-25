@@ -32,5 +32,13 @@
         <file>images/messageIng.png</file>
         <file>images/vedioIng.png</file>
         <file>images/vedio.png</file>
+        <file>images/tishi.png</file>
+        <file>images/addPic.png</file>
+        <file>images/save.png</file>
+        <file>images/speaker.png</file>
+        <file>images/mute.png</file>
+        <file>images/stop.png</file>
+        <file>images/play.png</file>
+        <file>images/pause.png</file>
     </qresource>
 </RCC>

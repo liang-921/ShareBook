@@ -1,10 +1,11 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include "fileopendialog.h"
 #include "personaluicontrol.h"
-#include "roundimage.h"
 #include "pushpagecontrol.h"
 #include "publishpagecontrol.h"
+#include "videopagecontrol.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,15 +13,16 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     qmlRegisterType<PersonalUIControl>("UIControl",1,0,"PersonalUIControl");
-    qmlRegisterType<RoundImage>("UIControl",1,0,"RoundImage");
     qmlRegisterType<PushPageControl>("UIControl",1,0,"PushPageControl");
     qmlRegisterType<PublishPageControl>("UIControl",1,0,"PublishPageControl");
+    qmlRegisterType<VideoPageControl>("UIControl", 1, 0, "VideoPageControl");
+    qmlRegisterType<FileOpenDialog>("UIControl", 1, 0, "FileOpenDialog");
+//    qmlRegisterType<FileSaveDialog>("MyModules", 1, 0, "FileSaveDialog");
 
-
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/ShareBook/qml/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/UI_ShareBook/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

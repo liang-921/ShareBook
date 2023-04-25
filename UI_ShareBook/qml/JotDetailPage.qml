@@ -157,112 +157,149 @@ Item {
         anchors.topMargin: parent.height*0.01
     }
 
-    ScrollView{
-        id:jotting_content
+
+    SwipeView{
+        id:image_area
         anchors.top: seperator_line_1.bottom
         anchors.topMargin: rootWidth*0.01
-//        anchors.bottom: mark_banner.top
         width: rootWidth
-        contentWidth:rootWidth
-        contentHeight:image_area.height+indicator.height+content.height+time.height+comment_count.height+rootHeight*0.2+commentListView.contentHeight
-        SwipeView{
-            id:image_area
-            width: rootWidth
-            height: rootHeight*0.4
-            currentIndex: indicator.currentIndex
-            Repeater{
-                model:jottingInfo.picPath
-                Image{
-                    width: rootWidth
-                    height: parent.height
-                    fillMode: Image.PreserveAspectFit
-                    source:jottingInfo.picPath[index].path
-                }
+        height: rootHeight*0.3
+        currentIndex: indicator.currentIndex
+        Repeater{
+            model:jottingInfo.picPath
+            Image{
+                width: rootWidth
+                height: parent.height
+                fillMode: Image.PreserveAspectFit
+                source:jottingInfo.picPath[index].path
             }
         }
+    }
 
-        PageIndicator {
-            id: indicator
-            anchors.top: image_area.bottom
-            anchors.topMargin: rootHeight*0.01
-            count: image_area.count
-            currentIndex: image_area.currentIndex
-            interactive: true //可以点击
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-        Text{
-            id:content
-            anchors.top: indicator.bottom
-            anchors.left: parent.left
-            anchors.margins: rootWidth*0.02
-            text:qsTr(jottingInfo.content)
-            font.pixelSize: 22
-            wrapMode: Text.WordWrap
-            clip:true
-            elide: Text.ElideRight
-        }
+    PageIndicator {
+        id: indicator
+        anchors.top: image_area.bottom
+        anchors.topMargin: rootHeight*0.01
+        count: image_area.count
+        currentIndex: image_area.currentIndex
+        interactive: true //可以点击
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+    Text{
+        id:content
+        anchors.top: indicator.bottom
+        anchors.left: parent.left
+        anchors.margins: rootWidth*0.02
+        text:qsTr(jottingInfo.content)
+        font.pixelSize: 22
+        wrapMode: Text.WordWrap
+        clip:true
+        elide: Text.ElideRight
+    }
 
-        Text{
-            id:time
-            anchors.top: content.bottom
-            anchors.left: parent.left
-            anchors.margins: rootWidth*0.02
-            text: qsTr(jottingInfo.time)
-            font.pixelSize: 18
-            color: "grey"
-        }
+    Text{
+        id:time
+        anchors.top: content.bottom
+        anchors.left: parent.left
+        anchors.margins: rootWidth*0.02
+        text: qsTr(jottingInfo.time)
+        font.pixelSize: 18
+        color: "grey"
+    }
 
-        Rectangle{
-            id:seperator_line_2
-            width: parent.width
-            height: 1
-            color: "grey"
-            anchors.top: time.bottom
-            anchors.topMargin: parent.height*0.01
-        }
+    Rectangle{
+        id:seperator_line_2
+        width: parent.width
+        height: 1
+        color: "grey"
+        anchors.top: time.bottom
+        anchors.topMargin: parent.height*0.01
+    }
 
-        Text{
-            id:comment_count
-            anchors.top: seperator_line_2.bottom
-            anchors.left: parent.left
-            anchors.margins: rootWidth*0.02
-            text: qsTr("共"+jottingInfo.commentCount+"条评论")
-            font.pixelSize: 18
-            color: "grey"
-        }
+    Text{
+        id:comment_count
+        anchors.top: seperator_line_2.bottom
+        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.margins: rootWidth*0.02
+        text: qsTr("共"+jottingInfo.commentCount+"条评论")
+        font.pixelSize: 18
+        color: "grey"
+    }
 
+    ScrollView{
+        id:comRec
+        anchors.top: comment_count.bottom
+        anchors.topMargin: rootWidth*0.02
+        height: rootWidth*0.8
+        width: rootWidth
+//        color: "red"
         Component{
             id:comment
             Rectangle{
                 width:rootWidth
-                Image{
+                anchors.left: parent.left
+                anchors.leftMargin: rootWidth*0.02
+                Rectangle{
                     id:comment_pic
-                    fillMode: Image.PreserveAspectFit
-                    source: jottingInfo.comment[index].pic
                     width: rootWidth*0.15
                     height: rootWidth*0.15
+                    anchors.left: parent.left
+                    anchors.topMargin:  rootWidth*0.03
+                    Image {
+                        id: head_image1
+                        smooth: true
+                        visible: false
+                        anchors.fill: parent
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.centerIn: parent.Center
+                        source:  jottingInfo.comment[index].pic
+//                        sourceSize: Qt.size(parent.size, parent.size)
+                    }
+                    Rectangle {
+                        id: head_mask1
+                        color: "black"
+                        anchors.fill: parent
+                        radius: width/2
+                        visible: false
+                        antialiasing: true
+                        smooth: true
+                    }
+                    OpacityMask {
+                        id:mask_image1
+                        anchors.fill: head_image1
+                        source: head_image1
+                        maskSource: head_mask1
+                        visible: true
+                        antialiasing: true
+                    }
                 }
+
+
                 Rectangle{
                     anchors.left:comment_pic.right
-                    anchors.margins: rootWidth*0.05
+                    anchors.leftMargin: rootWidth*0.02
+                    anchors.verticalCenter: parent.verticalCenter
                     Text {
                         id: comment_name
                         font.bold: true
-                        font.pixelSize: 20
+                        font.pixelSize: 18
                         color: "grey"
                         text: qsTr(jottingInfo.comment[index].netizenName)
                     }
                     Text {
                         id: comment_content
+                        width: rootWidth*0.8
                         anchors.top: comment_name.bottom
                         anchors.topMargin: rootWidth*0.01
-                        font.pixelSize: 20
+                        font.pixelSize: 18
                         text: qsTr(jottingInfo.comment[index].content)
+                        wrapMode: Text.Wrap
                     }
                     Text {
                         id: comment_time
                         anchors.top: comment_content.bottom
-                        anchors.topMargin: rootWidth*0.01
+                        anchors.topMargin: rootWidth*0.005
                         color: "grey"
                         font.pixelSize: 15
                         text: qsTr(jottingInfo.comment[index].time)
@@ -275,15 +312,21 @@ Item {
             id:commentListView
             width: rootWidth
             height: rootHeight
-            anchors.top: comment_count.bottom
-            anchors.left: parent.left
-            anchors.margins: rootWidth*0.02
+            anchors.fill: parent
             model:jottingInfo.comment
+            snapMode   :  ListView.SnapToItem
             delegate:comment
-            spacing:rootHeight*0.1
-            clip: true
+            spacing:rootWidth*0.2
+            Component.onCompleted: positionViewAtIndex(count-1, ListView.Beginning)
         }
+
+
     }
+
+
+
+
+
     Rectangle{
         width: rootWidth
         height: rootHeight*0.05
@@ -476,7 +519,7 @@ Item {
                             toast.show("请填写内容再发送!")
                             toast.anchors.bottomMargin=rootWindow.height*0.1
                         }else{
-                            jottingInfo.comment.push({"netizenName":netizen.nikeName,"pic":"qrc:/images/images/avatar.png","content":comment_edit.text,"time":"2022-06-01 14:12"})
+                            jottingInfo.comment.unshift({"netizenName":netizen.nikeName,"pic":"qrc:/images/images/avatar.png","content":comment_edit.text,"time":"2022-06-01 14:12"})
                             commentListView.model=jottingInfo.comment
                             commentListView.update()
                             comment_pop.close()

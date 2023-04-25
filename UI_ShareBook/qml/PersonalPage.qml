@@ -436,12 +436,15 @@ Item {
                                 color: "#000000"
                             }
                             Text {
-                                height:jotsListView.height*0.65*0.1
-                                width:jot.width*0.8
+//                                height:jotsListView.height*0.65*0.1
+                                color: "red"
+                                width:jot.width*0.6
                                 font.pixelSize: 12
                                 id: text_content
-                                text: jsonData[index].content
-                                wrapMode: Text.WordWrap
+                                text: qsTr(jsonData[index].content)
+                                elide: Text.ElideRight
+                                clip: true
+//                                wrapMode: Text.WordWrap
                                 leftPadding:5
                             }
                         }

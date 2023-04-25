@@ -10,7 +10,6 @@ Item {
 
     readonly property int rootWidth: pushPage.width
     readonly property int rootHeight: pushPage.height
-    readonly property url personalPage: "JotDetailPage.qml"
 
 
     property bool isGetConcerned: false
@@ -177,6 +176,7 @@ Item {
                 border.width:1
 //                anchors.bottomMargin: 0
 
+
                 Rectangle{
                     id:head_banner
                     anchors.left: parent.left
@@ -252,7 +252,9 @@ Item {
                         anchors.rightMargin: parent.width*0.01
                         flat: true
                         icon.color: "transparent"
-                        onClicked: {}
+                        onClicked: {
+                                    console.log(jottings)
+                        }
                     }
                 }
 
@@ -299,6 +301,7 @@ Item {
                     Button{
                         id:like
                         anchors.left: parent.left
+                        state: ""
                         Image {
                             id:likeimg
                             anchors.fill: parent
@@ -312,10 +315,22 @@ Item {
                         icon.color: "transparent"
                         anchors.verticalCenter: parent.verticalCenter
                         onClicked: {
-
+                            like.state == "clicked" ? like.state = "" : like.state = 'clicked';
                         }
-
-
+                        states: [
+                            State {
+                                name: ""
+                                PropertyChanges {
+                                    target: likeimg; source:"qrc:/images/images/like.png"
+                                }
+                            },
+                            State {
+                                name: "clicked"
+                                PropertyChanges {
+                                    target: likeimg; source:"qrc:/images/images/liked.png"
+                                }
+                            }
+                        ]
                     }
                     Button{
                         id:comment

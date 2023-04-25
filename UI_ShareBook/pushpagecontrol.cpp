@@ -1,5 +1,7 @@
 #include "pushpagecontrol.h"
 #include <nlohmann/json.hpp>
+#include <QDebug>
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -19,6 +21,7 @@ void PushPageControl::pushRecommendJottings()
     picPath1["path"]="qrc:/images/images/avatar.png";
     jot_json1["picPath"]={picPath1,picPath1,picPath1};
 
+    //https://wx2.sinaimg.cn/mw690/cf89118bgy1fpel3su4eyj20u00u0tqg.jpg
     json jot_json2;
     jot_json2["avatar"]="qrc:/images/images/avatar.png";
     jot_json2["nickName"]="Josua";
@@ -39,6 +42,8 @@ void PushPageControl::pushRecommendJottings()
     jottings["jottings"]={jot_json1,jot_json2,jot_json3};
 
     m_recommendJottings=QString::fromStdString(jottings.dump());
+    json j = json::parse(m_recommendJottings.toStdString());
+//    std::cout<<j.dump(4);
 }
 
 void PushPageControl::pushConcernedJottings()
@@ -90,6 +95,35 @@ void PushPageControl::pushLocalJottings()
     m_localJottings=QString::fromStdString(jottings.dump());
 }
 
+void PushPageControl::pushVideos()
+{
+    json jot_json1;
+    jot_json1["avatar"]="qrc:/images/images/avatar.png";
+    jot_json1["nickName"]="Baby";
+    jot_json1["content"]="We could leave the Christmas";
+    jot_json1["path"] = "http://192.168.38.249:8081/1/playlist.m3u8";
+
+    json jot_json2;
+    jot_json2["avatar"]="qrc:/images/images/avatar.png";
+    jot_json2["nickName"]="Angel";
+    jot_json2["content"]="This is our place, we make the rules";
+    jot_json2["path"] = "http://192.168.38.249:8081/2/playlist.m3u8";
+
+    json jot_json3;
+    jot_json3["avatar"]="qrc:/images/images/avatar.png";
+    jot_json3["nickName"]="Cindy";
+    jot_json3["content"]="very good!";
+    jot_json3["path"] = "http://192.168.38.249:8081/3/playlist.m3u8";
+
+    json videosInfo;
+    videosInfo["videos"] = {jot_json1,jot_json2,jot_json3};
+
+    std::cout<<"\n"<<videosInfo.dump(4);
+    m_videos = QString::fromStdString(videosInfo.dump());
+    json j = json::parse(m_videos.toStdString());
+
+}
+
 void PushPageControl::receiveOneJotting(QString jotting_id)
 {
     json jotting;
@@ -115,7 +149,32 @@ void PushPageControl::receiveOneJotting(QString jotting_id)
     comment_2["pic"]="qrc:/images/images/avatar.png";
     comment_2["content"]="I like it!";
     comment_2["time"]="2022-06-01 14:12";
-    jotting["comment"]={comment_1,comment_2};
+    json comment_3;
+    comment_3["netizenName"]="Aacy";
+    comment_3["pic"]="qrc:/images/images/avatar.png";
+    comment_3["content"]="I like it!";
+    comment_3["time"]="2022-06-01 14:12";
+    json comment_4;
+    comment_4["netizenName"]="Bacy";
+    comment_4["pic"]="qrc:/images/images/avatar.png";
+    comment_4["content"]=",I like it!I ";
+    comment_4["time"]="2022-06-01 14:12";
+    json comment_5;
+    comment_5["netizenName"]="Cacy";
+    comment_5["pic"]="qrc:/images/images/avatar.png";
+    comment_5["content"]="I like it!";
+    comment_5["time"]="2022-06-01 14:12";
+    json comment_6;
+    comment_6["netizenName"]="Dacy";
+    comment_6["pic"]="qrc:/images/images/avatar.png";
+    comment_6["content"]="I like it!";
+    comment_6["time"]="2022-06-01 14:12";
+    json comment_7;
+    comment_7["netizenName"]="Eacy";
+    comment_7["pic"]="qrc:/images/images/avatar.png";
+    comment_7["content"]="I like it!";
+    comment_7["time"]="2022-06-01 14:12";
+    jotting["comment"]={comment_1,comment_2,comment_3,comment_4,comment_5,comment_6,comment_7};
 
     m_jotting=QString::fromStdString(jotting.dump());
 }
@@ -158,5 +217,15 @@ void PushPageControl::setJotting(const QString &jotting)
 QString PushPageControl::getJotting() const
 {
     return m_jotting;
+}
+
+void PushPageControl::setVideos(const QString &videos)
+{
+    m_videos = videos;
+}
+
+QString PushPageControl::getVideos() const
+{
+    return m_videos;
 }
 

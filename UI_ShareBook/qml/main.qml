@@ -14,7 +14,7 @@ ApplicationWindow {
 
 //    qrc:/qml/PushPage.qml
     readonly property url pushPage_loader: "PushPage.qml"
-    readonly property url cyclePage_loader: "CyclePage.qml"
+    readonly property url videoPage_loader: "VideoPage.qml"
     readonly property url chooseMaterialPage_loader: "ChooseMaterialPage.qml"
     readonly property url messagePage_loader: "MessagePage.qml"
     readonly property url personalPage_loader: "PersonalPage.qml"
@@ -23,8 +23,9 @@ ApplicationWindow {
 
     readonly property int iconSize_avg:rootWindow.width * 0.2
 
-    property var materialData
+    property var filesModel
 
+//    property var videosInfo: JSON.parse(pushJottings.videos).videos
 
     QtObject {
         id: settings
@@ -46,11 +47,15 @@ ApplicationWindow {
         id:pushJottings
     }
 
+    VideoPageControl{
+        id:pushVideos
+    }
+
     PublishPageControl{
         id:publishControl
         Component.onCompleted: {
-            findLocalMaterial()
-            materialData=JSON.parse(localMaterial).materials
+//            findLocalMaterial()
+//            materialData=JSON.parse(localMaterial).materials
         }
     }
 
@@ -68,8 +73,11 @@ ApplicationWindow {
         asynchronous: true
         source:pushPage_loader
         Component.onCompleted: {
-            netizen.initData()
+//            netizen.initData()
             pushJottings.pushRecommendJottings()
+//            pushJottings.pushVideos()
+//            console.log(JSON.parse(pushJottings.recommendJottings).jottings)
+//            console.log(JSON.parse(pushJottings.videos).videos)
         }
     }
 
@@ -157,7 +165,8 @@ ApplicationWindow {
                 }
             }
             onClicked: {
-                loader.source = cyclePage_loader
+                loader.source = videoPage_loader
+                pushVideos.pushRecommendVideos()
                 bottom_button.visible = true
                 console.log("加载 "+ loader.source)
             }
@@ -211,7 +220,7 @@ ApplicationWindow {
             }
             onClicked: {
                 loader.source = chooseMaterialPage_loader
-                bottom_button.z = -1
+                bottom_button.visible = false
                 console.log("加载 "+ loader.source)
 
             }
@@ -299,7 +308,7 @@ ApplicationWindow {
                 loader.source = personalPage_loader
                 bottom_button.visible = true
                 //发信号给C++ 请求客户端获取服务器传来的个人信息
-//                netizen.initData()
+                netizen.initData()
                 console.log("加载 "+ loader.source)
             }
             states: [
@@ -326,5 +335,4 @@ ApplicationWindow {
             ]
         }
     }
-
 }
