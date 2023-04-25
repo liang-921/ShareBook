@@ -12,8 +12,8 @@ Item {
 
 
     //消息数据
-    property var messageData: value
-
+    property var messagesInfo: JSON.parse(pushMessages.notifications).notification
+    property var jotting_detail
 
     Rectangle{
         id:topRec
@@ -197,7 +197,8 @@ Item {
                             anchors.fill: parent
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.centerIn: parent.Center
-                            source: "qrc:/images/images/head.png"
+//                            source: "qrc:/images/images/head.png"
+                            source: messagesInfo[index].avatar
                             sourceSize: Qt.size(parent.size, parent.size)
                             antialiasing: true
                         }
@@ -231,33 +232,44 @@ Item {
                             font.bold: true
                             font.pixelSize: 15
                             color: "grey"
-                            text: qsTr("昵称")
+                            text: messagesInfo[index].nickName
                         }
                         Text {
                             id: content
                             anchors.top: name.bottom
                             anchors.topMargin: rootWidth*0.01
                             font.pixelSize: 15
-                            text: qsTr("您关注的人发布了新的笔记！")
+                            text: messagesInfo[index].content
                         }
                         Text {
                             id: comment_time
                             anchors.left: name.right
-                            anchors.leftMargin: rootWidth*0.6
+                            anchors.leftMargin: rootWidth*0.35
                             anchors.right: parent.right
                             anchors.rightMargin: rootWidth*0.05
                             color: "grey"
                             font.pixelSize: 15
-                            text: qsTr("时间")
+                            text: messagesInfo[index].time
                         }
                     }
 
 
+//                    Text{
+//                        id:jottingId
+//                        text:messagesInfo[index].jottingId
+
+//                    }
+
                     onClicked: {
-                        console.log("这个消息被点击了！")
+                        console.log("这个消息被点击了！,即将进入关注的人发布的新笔记！")
+                        console.log("进入笔记的ID为 "+ messagesInfo[index].jottingId)
+
+                        netizen.getOneJottingDetail(messagesInfo[index].jottingId)
+                        jotting_detail = JSON.parse(netizen.jotting)
+
+                        loader.setSource(jotDetailPage_loader,{"type":"message","jottingInfo":jotting_detail})
                     }
                 }
-
             }
         }
 
@@ -265,103 +277,11 @@ Item {
             id:messageList
             anchors.fill: parent
             delegate:messageComponent
-            model:listMode
+            model:messagesInfo
         }
 
 
-        ListModel{
-            id:listMode
-                ListElement {
-                   name: "Bill Smith"
-                   number: "555 3264"
-                   color1:"red"
-                }
-                ListElement {
-                   name: "John Brown"
-                   number: "555 8426"
-                   color1:"green"
-                }
-                ListElement {
-                   name: "Sam Wise"
-                   number: "555 0473"
-                    color1:"blue"
-                }
-                ListElement {
-                   name: "Bill Smith"
-                   number: "555 3264"
-                   color1:"red"
-                }
-                ListElement {
-                   name: "John Brown"
-                   number: "555 8426"
-                   color1:"green"
-                }
-                ListElement {
-                   name: "Sam Wise"
-                   number: "555 0473"
-                    color1:"blue"
-                }
-                ListElement {
-                   name: "Bill Smith"
-                   number: "555 3264"
-                   color1:"red"
-                }
-                ListElement {
-                   name: "John Brown"
-                   number: "555 8426"
-                   color1:"green"
-                }
-                ListElement {
-                   name: "Sam Wise"
-                   number: "555 0473"
-                    color1:"blue"
-                }
-                ListElement {
-                   name: "Bill Smith"
-                   number: "555 3264"
-                   color1:"red"
-                }
-                ListElement {
-                   name: "John Brown"
-                   number: "555 8426"
-                   color1:"green"
-                }
-                ListElement {
-                   name: "Sam Wise"
-                   number: "555 0473"
-                    color1:"blue"
-                }
-                ListElement {
-                   name: "Bill Smith"
-                   number: "555 3264"
-                   color1:"red"
-                }
-                ListElement {
-                   name: "John Brown"
-                   number: "555 8426"
-                   color1:"green"
-                }
-                ListElement {
-                   name: "Sam Wise"
-                   number: "555 0473"
-                    color1:"blue"
-                }
-                ListElement {
-                   name: "Bill Smith"
-                   number: "555 3264"
-                   color1:"red"
-                }
-                ListElement {
-                   name: "John Brown"
-                   number: "555 8426"
-                   color1:"green"
-                }
-                ListElement {
-                   name: "Sam Wise"
-                   number: "555 0473"
-                    color1:"blue"
-                }
-        }
+
 
     }
 

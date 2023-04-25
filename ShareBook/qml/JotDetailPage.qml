@@ -51,8 +51,9 @@ Item {
             flat: true
             icon.color: "transparent"
             onClicked: {
-                if(type=="preview"){
-                    loader.setSource(publishPage_loader,{"materialData":jottingInfo.picPath,"content_property":jottingInfo.content})
+                if(type=="message"){
+                    loader.source = messagePage_loader
+                     bottom_button.visible = true
                 }else if(type=="push"){
                     loader.source=pushPage_loader
                     bottom_button.visible = true

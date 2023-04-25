@@ -10,26 +10,33 @@ QT += widgets
 SOURCES += \
         base64.cpp \
         client.cpp \
-    fileopendialog.cpp \
-    filesavedialog.cpp \
+        fileopendialog.cpp \
+        filesavedialog.cpp \
         imageprovider.cpp \
         main.cpp \
-    messageuicontrol.cpp \
+        messageuicontrol.cpp \
         network.cpp \
         personaluicontrol.cpp \
         publishpagecontrol.cpp \
         pushpagecontrol.cpp \
+    videopagecontrol.cpp
 
 resources.files = qml/main.qml \
                     qml/ChooseMaterialPage.qml \
-                    qml/CyclePage.qml \
+                    qml/VideoPage.qml \
                     qml/JotDetailPage.qml \
                     qml/MessagePage.qml \
                     qml/PersonalPage.qml \
                     qml/PushPage.qml \
                     qml/PersonalRelationList.qml \
                     qml/PublishPage.qml \
-                    qml/Toast.qml
+                    qml/Toast.qml \
+                    qml/mediaplayer/AudioControl.qml \
+                    qml/mediaplayer/PlaybackControl.qml \
+                    qml/mediaplayer/PlaybackRateControl.qml \
+                    qml/mediaplayer/PlaybackSeekControl.qml \
+                    qml/mediaplayer/Mute_Icon.svg \
+                    qml/mediaplayer/Speaker_Icon.svg
 
 DISTFILES += \
     android_sources/AndroidManifest.xml \
@@ -40,7 +47,6 @@ DISTFILES += \
     android_sources/res/drawable-xxhdpi/icon.png \
     android_sources/res/drawable-xxxhdpi/icon.png \
     qml/ChooseMaterialPage.qml \
-    qml/CyclePage.qml \
     qml/JotDetailPage.qml \
     qml/MessagePage.qml \
     qml/PersonalPage.qml \
@@ -48,7 +54,15 @@ DISTFILES += \
     qml/PublishPage.qml \
     qml/PushPage.qml \
     qml/Toast.qml \
-    qml/main.qml
+    qml/VideoPage.qml \
+    qml/main.qml \
+    qml/mediaplayer/AudioControl.qml \
+    qml/mediaplayer/Mute_Icon.svg \
+    qml/mediaplayer/PlaybackControl.qml \
+    qml/mediaplayer/PlaybackRateControl.qml \
+    qml/mediaplayer/PlaybackSeekControl.qml \
+    qml/mediaplayer/Speaker_Icon.svg \
+    qtquick2controlsapplicationviewer/qtquick2controlsapplicationviewer.pri
 
 resources.prefix = /$${TARGET}
 RESOURCES += resources \
@@ -82,5 +96,5 @@ HEADERS += \
     personaluicontrol.h \
     publishpagecontrol.h \
     pushpagecontrol.h \
+    videopagecontrol.h
 
-DEFINES += QT_NO_WARNING_OUTPUT

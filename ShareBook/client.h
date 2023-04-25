@@ -17,6 +17,7 @@ public:
     void start();
     void reconnect();
     std::string receiveFile();
+    void closeSocket();
 private:
     Client();
     static Client* m_instance;

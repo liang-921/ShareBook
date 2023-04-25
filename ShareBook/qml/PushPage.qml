@@ -278,6 +278,13 @@ Item {
                             fillMode: Image.PreserveAspectFit
 //                            source:"qrc:/images/images/head.png"
                             source:jottings[jottingIndex.text].picPath[index].path
+
+                            MouseArea{
+                                anchors.fill: parent
+                                onDoubleClicked: {
+                                    like.state == "clicked" ? like.state = "" : like.state = 'clicked';
+                                }
+                            }
                         }
                     }
                 }
@@ -296,6 +303,7 @@ Item {
                     Button{
                         id:like
                         anchors.left: parent.left
+                        state: ""
                         Image {
                             id:likeimg
                             anchors.fill: parent
@@ -309,10 +317,22 @@ Item {
                         icon.color: "transparent"
                         anchors.verticalCenter: parent.verticalCenter
                         onClicked: {
-
+                            like.state == "clicked" ? like.state = "" : like.state = 'clicked';
                         }
-
-
+                        states: [
+                            State {
+                                name: ""
+                                PropertyChanges {
+                                    target: likeimg; source:"qrc:/images/images/like.png"
+                                }
+                            },
+                            State {
+                                name: "clicked"
+                                PropertyChanges {
+                                    target: likeimg; source:"qrc:/images/images/liked.png"
+                                }
+                            }
+                        ]
                     }
                     Button{
                         id:comment
@@ -346,7 +366,6 @@ Item {
                         height: rootWidth*0.07
                         flat: true
                         icon.color: "transparent"
-                        onClicked: {}
                     }
 
                     PageIndicator {
@@ -359,12 +378,14 @@ Item {
                     }
                     Button{
                         id:collect
+                        state: ""
                         width: rootWidth*0.07
                         height: rootWidth*0.07
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.right: parent.right
                         anchors.rightMargin: rootWidth*0.04
                         Image {
+                            id:collectImg
                             anchors.fill: parent
                             fillMode: Image.PreserveAspectFit
                             sourceSize: Qt.size(28, 28)
@@ -373,7 +394,23 @@ Item {
                         flat: true
                         icon.color: "transparent"
                         Layout.alignment: Qt.AlignVCenter
-                        onClicked: {}
+                        onClicked: {
+                            collect.state == "clicked" ? collect.state = "" : collect.state = 'clicked';
+                        }
+                        states: [
+                            State {
+                                name: ""
+                                PropertyChanges {
+                                    target: collectImg; source:"qrc:/images/images/collect1.png"
+                                }
+                            },
+                            State {
+                                name: "clicked"
+                                PropertyChanges {
+                                    target: collectImg; source:"qrc:/images/images/collected.png"
+                                }
+                            }
+                        ]
                     }
                 }
 

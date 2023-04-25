@@ -92,7 +92,10 @@ void ImageProvider::setDetailUIAvatars(const QHash<QString, QPixmap> &newPixmaps
     m_detailUIAvatars = newPixmaps;
 }
 
-
+void ImageProvider::setVideoAvatars(const QHash<QString, QPixmap> &newPixmaps)
+{
+    m_videoAvatars = newPixmaps;
+}
 
 
 

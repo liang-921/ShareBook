@@ -49,7 +49,6 @@ void PushPageControl::pushRecommendJottings()
     json receiveJottings;
     //浏览的笔记的信息是一个大数组
     QHash<QString,QPixmap> avatars;
-
     QHash<QString,QPixmap> allPics;
     for(auto &info:scanInfo["jottings"]){
         json jotting;

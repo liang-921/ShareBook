@@ -3,13 +3,23 @@
 
 #include <QObject>
 
-class MessageUIControl
+class MessageUIControl:public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QString notifications READ getNotifications WRITE setNotifications NOTIFY notificationsChanged)
+
 public:
-    MessageUIControl();
+    explicit MessageUIControl(QObject *parent=nullptr);
+    Q_INVOKABLE void scanMessage();
 
+    void setNotifications(const QString &notifications);
+    QString getNotifications()const;
 
+signals:
+    void notificationsChanged(const QString notifications);
 private:
+
+    QString m_notifications;
 
 };
 

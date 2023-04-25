@@ -17,6 +17,8 @@ public:
     void setpushUIAvatars(const QHash<QString,QPixmap> &newPixmaps);
     void setpushUIPics(const QHash<QString,QPixmap> &newPixmaps);
     void setDetailUIAvatars(const QHash<QString,QPixmap> &newPixmaps);
+    void setVideoAvatars(const QHash<QString,QPixmap> &newPixmaps);
+
 
     QPixmap getPicture(std::string path);
 private:
@@ -28,7 +30,7 @@ private:
     QHash<QString,QPixmap> m_pushUIAvatars;
     QHash<QString,QPixmap> m_detailUIAvatars;
     QHash<QString,QPixmap> m_pushUIPics;
-
+    QHash<QString,QPixmap> m_videoAvatars;
 };
 
 #endif // IMAGEPROVIDER_H

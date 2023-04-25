@@ -4,9 +4,12 @@
 
 #include "fileopendialog.h"
 #include "imageprovider.h"
+#include "messageuicontrol.h"
 #include "personaluicontrol.h"
 #include "pushpagecontrol.h"
 #include "publishpagecontrol.h"
+#include "videopagecontrol.h"
+
 
 ImageProvider *imageProvider = nullptr;
 int main(int argc, char *argv[])
@@ -18,7 +21,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<PushPageControl>("UIControl",1,0,"PushPageControl");
     qmlRegisterType<PublishPageControl>("UIControl",1,0,"PublishPageControl");
     qmlRegisterType<FileOpenDialog>("UIControl", 1, 0, "FileOpenDialog");
-//    qmlRegisterType<FileSaveDialog>("UIControl", 1, 0, "FileSaveDialog");
+    qmlRegisterType<VideoPageControl>("UIControl", 1, 0, "VideoPageControl");
+    qmlRegisterType<MessageUIControl>("UIControl", 1, 0, "MessageUIControl");
 
     QApplication app(argc, argv);
 

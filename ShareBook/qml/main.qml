@@ -14,12 +14,11 @@ ApplicationWindow {
 
 //    qrc:/qml/PushPage.qml
     readonly property url pushPage_loader: "PushPage.qml"
-    readonly property url cyclePage_loader: "CyclePage.qml"
-    readonly property url chooseMaterialPage_loader: "ChooseMaterialPage.qml"
+    readonly property url videoPage_loader: "VideoPage.qml"
+    readonly property url publishPage_loader: "PublishPage.qml"
     readonly property url messagePage_loader: "MessagePage.qml"
     readonly property url personalPage_loader: "PersonalPage.qml"
     readonly property url jotDetailPage_loader: "JotDetailPage.qml"
-    readonly property url publishPage_loader: "PublishPage.qml"
 
     readonly property int iconSize_avg:rootWindow.width * 0.2
 
@@ -38,20 +37,27 @@ ApplicationWindow {
         property real fontSizeSmall: 10
     }
 
-    PersonalUIControl{
-        id:netizen
-    }
+
 
     PushPageControl{
         id:pushJottings
     }
 
+    VideoPageControl{
+        id:pushVideos
+    }
+
     PublishPageControl{
         id:publishControl
-        Component.onCompleted: {
-            findLocalMaterial()
-            materialData=JSON.parse(localMaterial).materials
-        }
+    }
+
+    MessageUIControl{
+        id:pushMessages
+    }
+
+
+    PersonalUIControl{
+        id:netizen
     }
 
 //    Toast{
@@ -157,7 +163,8 @@ ApplicationWindow {
                 }
             }
             onClicked: {
-                loader.source = cyclePage_loader
+                pushVideos.pushRecommendVideos()
+                loader.source = videoPage_loader
                 bottom_button.visible = true
                 console.log("加载 "+ loader.source)
             }
@@ -210,7 +217,7 @@ ApplicationWindow {
                 }
             }
             onClicked: {
-                loader.source = chooseMaterialPage_loader
+                loader.source = publishPage_loader
                 bottom_button.visible = false
                 console.log("加载 "+ loader.source)
             }
@@ -244,6 +251,7 @@ ApplicationWindow {
 
                 loader.source = messagePage_loader
                 bottom_button.visible = true
+                pushMessages.scanMessage()
                 console.log("加载 "+ loader.source)
             }
             states: [

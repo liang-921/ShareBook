@@ -1,173 +1,283 @@
 import QtQuick 2.0
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick
-
+import QtMultimedia 5.8
+import QtCore
+import UIControl 1.0
 Item {
     id:publishPage
 
     readonly property int rootWidth: publishPage.width
     readonly property int rootHeight: publishPage.height
+    property var selectMaterialData: []
+    property int materialCount: 0
 
-//    property var materialItem:[]
-    property var materialPath:[]
-    property string content_property: ""
+    FileOpenDialog {
+        id: openFile
+        title: "Open file"
+        nameFilters: ["Images (*.png *.jpg *.jpeg)", /*"Documents (*.doc *.docx)"*/, "Videos (*.mp4)","All files (*)"]
+        selectMultiple:  true
+        onAccepted: {
+//            outputOpenFile.text = "File selected: " + openFile.fileUrl
+            for(var i=0;i<openFile.fileUrls.length;i++){
+                var data = {"path":openFile.fileUrls[i]};
+                filesModel.append(data)
 
-    property var jottingInfo:{"netizenName":"","time":"0000-00-00 00:00","content":"","picPath":[],"comment":[],"likeCount":"0","collectCount":"0","commentCount":"0"}
-
-    function clearJotInfo(){
-        for(var i=0;i<materialPath.length;i++){
-            jottingInfo.picPath.pop()
-            jottingInfo.comment.pop()
+            }
+            picListView.model = filesModel
         }
+        onRejected: outputOpenFile.text = "File selected: –"
     }
 
-    function saveJotInfo(){
-        var pathString=""
-        for(var i=0;i<materialPath.length-1;i++){
-            pathString+=materialPath[i]+","
-        }
-        pathString+=materialPath[materialPath.length-1]
-        publishControl.publishJotting(pathString,content_edit.text,netizen.nickName,"qrc:/images/images/avatar.png")
-    }
-
-    Button{
-        id:backButton
-        icon.source: "qrc:/images/images/backbutton.png"
-        icon.width: rootWidth*0.1
-        icon.height: rootWidth*0.1
-        width: icon.width
-        height: icon.height
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.margins: rootWidth*0.02
-        flat: true
-        onClicked: {
-            loader.setSource(chooseMaterialPage_loader,{"selectMaterialData":materialPath,"materialCount":materialPath.length})
-            bottom_button.visible = false
+    Popup {
+        id: publishFinish
+        anchors.centerIn: Overlay.overlay
+        Text {
+            id: publishFinishText
+            color: "red"
+            font.bold: true
         }
     }
 
     Rectangle{
-        id:preview_button
-        radius: 45
-        border.width: 1
-        border.color: "black"
-        width: rootWidth*0.2
-        height: rootHeight*0.04
+        id:topRec
+        width:rootWidth
+        height:rootWidth*0.12
+        anchors.left: parent.left
+
         anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.margins: rootWidth*0.03
-        Text {
-            anchors.centerIn: parent
-            text: qsTr("Preview")
+        anchors.topMargin: rootWidth*0.02
+
+        Button{
+            id:backButton
+            width: rootWidth*0.06
+            height: rootWidth*0.06
+            anchors.left: parent.left
+            anchors.leftMargin: rootWidth*0.02
+            anchors.verticalCenter: parent.verticalCenter
+            Image {
+                id: backImg
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                sourceSize: Qt.size(30, 30)
+                source:"qrc:/images/images/backbutton.png"
+            }
+
+            flat: true
+            icon.color: "transparent"
+            onClicked: {
+                loader.source=pushPage_loader
+                bottom_button.visible = true
+            }
         }
-        TapHandler{
-            onTapped: {
-                clearJotInfo()
-                saveJotInfo()
-                loader.setSource(jotDetailPage_loader,{"jottingInfo":jottingInfo,"type":"preview"})
+
+
+        Button{
+            id: concern_button
+            anchors.left: backButton.right
+            anchors.leftMargin:  rootWidth*0.8
+            anchors.right: parent.right
+            anchors.rightMargin: rootWidth*0.02
+            width: rootWidth*0.06
+            height: rootWidth*0.06
+            flat: true
+            icon.color: "transparent"
+            anchors.verticalCenter: parent.verticalCenter
+            Image {
+                id: tishiImg
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                sourceSize: Qt.size(30, 30)
+                source:"qrc:/images/images/tishi.png"
+            }
+            onClicked: {
+                console.log("提示被点击！")
             }
         }
     }
 
-    Rectangle{
-        id:seperator_line_1
-        width: parent.width
-        height: 1
-        color: "#000000"
-        anchors.top: backButton.bottom
-        anchors.topMargin: parent.width*0.02
-    }
 
     Component{
-        id:materialComponent
+        id:imgDelegate
         Rectangle{
-            id: material
-            width:rootWidth*0.2
-            height: width
+            width: 120
+            height:120
+//            color: "red"
             Image{
-                width:parent.width
-                height: width
-                source: materialPath[index].path
-                IconImage{
-                    width: parent.width*0.2
-                    height: width
-                    anchors.top: parent.top
-                    anchors.right: parent.right
-                    anchors.topMargin: -parent.width*0.05
-                    anchors.rightMargin: -parent.width*0.05
-                }
-            }
-
-            TapHandler{
-                onTapped: {
-
-                }
+//                fillMode: Image.PreserveAspectFit
+                anchors.fill: parent
+                source: path
             }
         }
     }
 
-    ListView {
-        id: materialsListView
+
+    GridView{
+        id: picListView
         width: rootWidth
-        height: rootHeight*0.15
-        anchors.top: seperator_line_1.bottom
-        anchors.left: parent.left
+        height: rootWidth/3
+        anchors.top: topRec.bottom
+        anchors.topMargin: rootWidth*0.02
         anchors.right: parent.right
-        anchors.topMargin: rootWidth*0.03
-        anchors.leftMargin: rootWidth*0.03
-        anchors.rightMargin: rootWidth*0.03
-        orientation: ListView.Horizontal
-        spacing: parent.width*0.03
-        model: materialPath
-        delegate: materialComponent
+        anchors.rightMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        ListModel{
+            id:filesModel
+        }
+        clip: true
+        flow: GridView.FlowTopToBottom
+        cellWidth: 130
+        cellHeight: 130
+        delegate: imgDelegate
     }
 
-    Rectangle{
-        width: rootWidth
-        height: rootHeight*0.4
-        anchors.top: materialsListView.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: rootWidth*0.03
-        anchors.rightMargin: rootWidth*0.03
-        border.width: 1
-        border.color: "grey"
-        TextArea{
-            id:content_edit
+    Button {
+        id:openBtn
+        anchors.top: picListView.bottom
+        anchors.topMargin: rootWidth*0.02
+        width:60
+        height:60
+        background: Rectangle{
+            color:"transparent"
+        }
+        Image {
+            id: addImg
             anchors.fill: parent
-            wrapMode: TextEdit.WrapAnywhere
-            topPadding:rootWidth*0.01
-            leftPadding:rootWidth*0.01
-            rightPadding:rootWidth*0.01
-            placeholderText:qsTr("Enter Content")
-            placeholderTextColor: "grey"
-            text:content_property
+            fillMode: Image.PreserveAspectFit
+            sourceSize: Qt.size(30, 30)
+            source:"qrc:/images/images/addPic.png"
         }
+        onClicked: { openFile.open(); }
     }
 
     Rectangle{
-        id:publish_button
-        radius: 45
-        border.width: 1
-        border.color: "black"
-        width: rootWidth*0.4
-        height: rootHeight*0.05
-        anchors.bottom: parent.bottom
+        id:speRec
+        width: rootWidth
+        height:1
+        anchors.top: openBtn.bottom
+        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
         anchors.right: parent.right
-        anchors.margins: rootWidth*0.1
-        Text {
-            anchors.centerIn: parent
-            text: qsTr("Publish")
+        anchors.rightMargin: rootWidth*0.02
+        color: "#D3D3D3"
+    }
+
+    Rectangle{
+        id:editRec
+        width: rootWidth
+        height:120
+        anchors.top: speRec.bottom
+        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        anchors.right: parent.right
+        anchors.rightMargin: rootWidth*0.02
+        TextArea{
+            id:edit
+            anchors.fill: parent
+            overwriteMode: true
+            background: Rectangle{
+                color:"transparent"
+            }
+
+
+            placeholderText:"这一刻的想法..."
         }
-        TapHandler{
-            onTapped: {
-                clearJotInfo()
-                saveJotInfo()
-//                loader.source=
+
+    }
+
+    Rectangle{
+        id:speRec2
+        width: rootWidth
+        height:1
+        anchors.top: editRec.bottom
+        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        anchors.right: parent.right
+        anchors.rightMargin: rootWidth*0.02
+        color: "#D3D3D3"
+    }
+
+
+    Rectangle{
+        id:bottomRec
+        width: rootWidth
+        height:60
+//        anchors.top: speRec2.bottom
+//        anchors.topMargin: rootWidth*0.02
+        anchors.left: parent.left
+        anchors.leftMargin: rootWidth*0.02
+        anchors.right: parent.right
+        anchors.rightMargin: rootWidth*0.02
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: rootWidth*0.02
+//        color: "#D3D3D3"
+        Button {
+            id: saveBtn
+            anchors.left: parent.left
+            width:40
+            height:40
+            anchors.verticalCenter:parent.verticalCenter
+            background: Rectangle{
+                color: "white"
+                opacity: 0.7
+            }
+
+            ColumnLayout{
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 1
+                Image {
+                    id: saveImg
+                    width: 30
+                    height: 30
+                    fillMode: Image.PreserveAspectFit
+                    sourceSize: Qt.size(30, 30)
+                    source:"qrc:/images/images/save.png"
+                }
+                Text {
+                    id:saveText
+                    text: qsTr("存草稿")
+                    Layout.alignment: Qt.AlignHCenter
+                    font.pointSize: 12
+                }
+            }
+
+            onClicked: {console.log("存草稿被点击啦！") }
+        }
+
+        Button{
+            id:publish
+            anchors.left: saveBtn.right
+            anchors.leftMargin: rootWidth*0.02
+            anchors.right: parent.right
+            anchors.rightMargin: rootWidth*0.02
+            anchors.verticalCenter:parent.verticalCenter
+            width:90
+            height:60
+            background: Rectangle{
+                radius: 30
+                color: 	"#EE0000"
+            }
+            text: "发布笔记"
+            onClicked: {
+                openFile.publishJotting(edit.text)
+                publishFinishText.text = "发布成功！"
+                publishFinish.open()
+                console.log("发布笔记点击啦！")
+
+                loader.source=pushPage_loader
+                bottom_button.visible = true
+            }
+            font{
+                pixelSize: 20
             }
         }
+
+
     }
 
 }
