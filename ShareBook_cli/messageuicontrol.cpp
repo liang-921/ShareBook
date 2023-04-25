@@ -14,6 +14,7 @@ using namespace std;
 using json = nlohmann::json;
 extern ImageProvider *imageProvider;
 
+
 MessageUIControl::MessageUIControl(QObject *parent):QObject(parent)
 {
 

@@ -6,6 +6,7 @@
 
 using json = nlohmann::json;
 
+
 PublishPageControl::PublishPageControl(QObject *parent):
     QObject(parent)
 {

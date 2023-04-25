@@ -5,6 +5,7 @@
 #include "client.h"
 #include "clientInfo.h"
 
+
 ImageProvider::ImageProvider()
     :QQuickImageProvider(QQuickImageProvider::Pixmap)
 {

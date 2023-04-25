@@ -12,13 +12,14 @@ ApplicationWindow {
     title: qsTr("ShareBook")
     color: "#ffffff"
 
-//    qrc:/qml/PushPage.qml
+    readonly property url initInfoPage_loader: "InitInfoPage.qml"
     readonly property url pushPage_loader: "PushPage.qml"
     readonly property url videoPage_loader: "VideoPage.qml"
     readonly property url publishPage_loader: "PublishPage.qml"
     readonly property url messagePage_loader: "MessagePage.qml"
     readonly property url personalPage_loader: "PersonalPage.qml"
     readonly property url jotDetailPage_loader: "JotDetailPage.qml"
+
 
     readonly property int iconSize_avg:rootWindow.width * 0.2
 
@@ -72,10 +73,11 @@ ApplicationWindow {
         id: loader
         anchors.fill: parent
         asynchronous: true
-        source:pushPage_loader
+        source:initInfoPage_loader
+//        source:pushPage_loader
         Component.onCompleted: {
 //            netizen.initData()
-            pushJottings.pushRecommendJottings()
+//            pushJottings.pushRecommendJottings()
         }
     }
 
@@ -85,6 +87,7 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         contentWidth: parent.width
         contentHeight: 60
+        visible: false
 
         TabButton {
             height: parent.height
@@ -111,6 +114,7 @@ ApplicationWindow {
                 }
             }
             onClicked: {
+//                pushJottings.pushRecommendJottings()
                 loader.source = pushPage_loader
                 bottom_button.visible = true
                 console.log("加载 "+ loader.source)

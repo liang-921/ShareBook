@@ -51,6 +51,7 @@ public:
 
     Q_INVOKABLE void initData();
     Q_INVOKABLE void getOneJottingDetail(QString jotting_id);
+    Q_INVOKABLE void initClientInfo(QString id,QString ipaddr);
 
 signals:
     void nickNameChanged(const QString nickName);

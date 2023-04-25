@@ -375,3 +375,10 @@ void PersonalUIControl::getOneJottingDetail(QString jotting_id)
     cout<<"==============笔记的详细信息：=============="<<endl;
     cout<<m_jotting.toStdString();
 }
+
+void PersonalUIControl::initClientInfo(QString id, QString ipaddr)
+{
+    std::cout<<id.toStdString()<<"\n"<<ipaddr.toStdString()<<endl;
+    ID = id.toStdString();
+    IPADDR  =ipaddr.toStdString();
+}

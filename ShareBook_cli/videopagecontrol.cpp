@@ -12,7 +12,6 @@
 
 using json = nlohmann::json;
 extern ImageProvider *imageProvider;
-
 VideoPageControl::VideoPageControl(QObject *parent):
     QObject(parent)
 {

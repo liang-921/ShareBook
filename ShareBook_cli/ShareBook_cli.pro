@@ -10,6 +10,7 @@ QT += widgets
 SOURCES += \
         base64.cpp \
         client.cpp \
+        clientInfo.cpp \
         fileopendialog.cpp \
         filesavedialog.cpp \
         imageprovider.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 
 resources.files = qml/main.qml \
                     qml/ChooseMaterialPage.qml \
+                    qml/InitInfoPage.qml \
                     qml/VideoPage.qml \
                     qml/JotDetailPage.qml \
                     qml/MessagePage.qml \
@@ -48,6 +50,7 @@ DISTFILES += \
     android_sources/res/drawable-xxhdpi/icon.png \
     android_sources/res/drawable-xxxhdpi/icon.png \
     qml/ChooseMaterialPage.qml \
+    qml/InitInfoPage.qml \
     qml/JotDetailPage.qml \
     qml/MessagePage.qml \
     qml/PersonalPage.qml \
