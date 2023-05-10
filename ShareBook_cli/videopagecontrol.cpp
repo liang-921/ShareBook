@@ -37,7 +37,7 @@ void VideoPageControl::pushRecommendVideos()
 //    std::cout<<scanInfo.dump(4)<<std::endl;
 
      json receiveVideos;
-     //浏览的笔记的信息是一个大数组
+     //浏览的信息是一个大数组
      QHash<QString,QPixmap> avatars;
      QHash<QString,QPixmap> allPics;
      for(auto &info:scanInfo){

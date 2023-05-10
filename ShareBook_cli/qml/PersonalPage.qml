@@ -122,7 +122,7 @@ Item {
                         id:netizenid
                         font.pixelSize: 20
                         color:"#DCDCDC"
-                        text: qsTr("id号: ") + qsTr("数字")
+                        text: qsTr("id号: ") + netizen.id
                     }
                 }
             }
@@ -440,17 +440,38 @@ Item {
                                 height:1
                                 color: "#000000"
                             }
-                            Text {
+
+                            Rectangle{
+                                width:rootWidth*0.4
                                 height:jotsListView.height*0.65*0.1
-                                width:jot.width*0.8
-                                font.pixelSize: 12
-                                id: text_content
-                                text: jsonData[index].content
-                                wrapMode: Text.WordWrap
-                                leftPadding:5
-//                                clip:true
-//                                elide: Text.ElideRight
+                                color:"transparent"
+                                Text{
+                                    anchors.fill: parent
+                                    verticalAlignment: TextInput.AlignVCenter
+                                    horizontalAlignment: TextInput.AlignHCenter
+                                    color: "black"
+                                    font.pixelSize: 12
+                                    id: text_content
+                                    text: qsTr(jsonData[index].content)
+                                    elide: Text.ElideRight
+                                    clip: true
+                                    wrapMode: Text.WordWrap
+                                    leftPadding:5
+                                }
                             }
+
+
+//                            Text {
+//                                height:jotsListView.height*0.65*0.1
+//                                width:jot.width*0.8
+//                                font.pixelSize: 12
+//                                id: text_content
+//                                text: jsonData[index].content
+//                                wrapMode: Text.WordWrap
+//                                leftPadding:5
+////                                clip:true
+////                                elide: Text.ElideRight
+//                            }
                         }
                         TapHandler{
                             onTapped: {

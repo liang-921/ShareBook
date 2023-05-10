@@ -7,6 +7,7 @@ class PersonalUIControl:public QObject
 {
     Q_OBJECT  
     Q_PROPERTY(QString nickName READ getNickName WRITE setNickName NOTIFY nickNameChanged)
+    Q_PROPERTY(QString id READ getID WRITE setID NOTIFY idChanged)
     Q_PROPERTY(QString sign READ getSign WRITE setSign NOTIFY signChanged)
     Q_PROPERTY(QString avatar READ getAvatar WRITE setAvatar NOTIFY avatarChanged)
     Q_PROPERTY(QString jotting READ getJotting WRITE setJotting NOTIFY jottingChanged)
@@ -18,6 +19,10 @@ class PersonalUIControl:public QObject
     Q_PROPERTY(QString fanCount READ getFanCount WRITE setFanCount NOTIFY fanCountChanged)
 public:
     explicit PersonalUIControl(QObject *parent = nullptr);
+
+    void setID(const QString &id);
+    QString getID()const;
+
 
     void setNickName(const QString &nickName);
     QString getNickName()const;
@@ -54,6 +59,7 @@ public:
     Q_INVOKABLE void initClientInfo(QString id,QString ipaddr);
 
 signals:
+    void idChanged(const QString id);
     void nickNameChanged(const QString nickName);
     void signChanged(const QString sign);
     void avatarChanged(const QString avatar);
@@ -65,6 +71,7 @@ signals:
     void interestCountChanged(const QString interestCount);
     void fanCountChanged(const QString fansCount);
 private:
+    QString m_id;
     QString m_nickName;
     QString m_sign;
     QString m_avatar;

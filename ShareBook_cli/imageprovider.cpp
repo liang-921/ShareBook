@@ -19,20 +19,28 @@ QPixmap ImageProvider::requestPixmap(const QString &id, QSize *size, const QSize
     if(id=="avatar"){
         qDebug()<<"头像";
         return m_avatar;
+        //第一张图片
     } else if(m_firstPics.find(id) != m_firstPics.end()){
         return m_firstPics[id];
+        //关注的人头像
     } else if(m_interestAvatars.find(id) != m_interestAvatars.end()){
         return m_interestAvatars[id];
+        //粉丝头像
     } else if(m_fanAvatars.find(id) != m_fanAvatars.end()){
         return m_fanAvatars[id];
+        //推送界面头像
     } else if(m_pushUIAvatars.find(id) != m_pushUIAvatars.end()){
         return m_pushUIAvatars[id];
+        //推送UI图片
     } else if(m_pushUIPics.find(id) != m_pushUIPics.end()){
         return m_pushUIPics[id];
+        //细节图片
     }else if(m_detailUIAvatars .find(id) != m_detailUIAvatars.end()){
         return m_detailUIAvatars[id];
+        //消息UI头像
     }else if(m_messageUIAvatars .find(id) != m_messageUIAvatars.end()){
         return m_messageUIAvatars[id];
+        //视频界面头像
     }else if(m_videoAvatars .find(id) != m_videoAvatars.end()){
         return m_videoAvatars[id];
     }

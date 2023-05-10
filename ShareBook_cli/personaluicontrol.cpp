@@ -17,6 +17,16 @@ PersonalUIControl::PersonalUIControl(QObject *parent):
 
 }
 
+void PersonalUIControl::setID(const QString &id)
+{
+    m_id = id;
+}
+
+QString PersonalUIControl::getID() const
+{
+    return m_id;
+}
+
 void PersonalUIControl::setNickName(const QString &nickName)
 {
     m_nickName=nickName;
@@ -167,6 +177,8 @@ void PersonalUIControl::initData()
         {"id",ID},
         {"request","InitPersonalInfo"}
     };
+
+    setID(QString::fromStdString(ID));
     std::string sendData = message.dump();
     Client::getInstance()->reconnect();
     Client::getInstance()->send(sendData.c_str(),sendData.length());

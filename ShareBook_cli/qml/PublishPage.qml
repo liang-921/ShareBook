@@ -17,7 +17,7 @@ Item {
     FileOpenDialog {
         id: openFile
         title: "Open file"
-        nameFilters: ["Images (*.png *.jpg *.jpeg)", /*"Documents (*.doc *.docx)"*/, "Videos (*.mp4)","All files (*)"]
+        nameFilters: ["All files (*)"]
         selectMultiple:  true
         onAccepted: {
 //            outputOpenFile.text = "File selected: " + openFile.fileUrl
@@ -123,6 +123,7 @@ Item {
                 anchors.fill: parent
                 source: path
             }
+
         }
     }
 

@@ -70,6 +70,7 @@ void PushPageControl::pushRecommendJottings()
         avatars.insert(QString::fromStdString(avatarId),pixmap);
         jotting["avatarPath"] = avatarPath;
 
+        jotting["file"] = "JotDetailPage.qml";
 
         jotting["time"] = info["time"];
 
@@ -182,7 +183,7 @@ void PushPageControl::receiveOneJotting(QString jotting_id)
             jotting["netizenName"] = jot["nickName"];
             jotting["picPath"] = jot["picPath"];
             jotting["time"] = jot["time"];
-            jotting["time"] = jot["content"];
+            jotting["content"] = jot["content"];
         }
     }
 

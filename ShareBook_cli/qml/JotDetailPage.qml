@@ -116,7 +116,7 @@ Item {
         Button{
             id: concern_button
             anchors.left: netizen_name.right
-            anchors.leftMargin:  rootWidth*0.35
+            anchors.leftMargin:  rootWidth*0.03
             width: rootWidth*0.15
             height: rootWidth*0.08
             anchors.verticalCenter: parent.verticalCenter
@@ -199,20 +199,41 @@ Item {
             interactive: true //可以点击
             anchors.horizontalCenter: parent.horizontalCenter
         }
-        Text{
+
+        Rectangle{
             id:content
-            width: rootWidth*0.9
             anchors.top: indicator.bottom
             anchors.left: parent.left
             anchors.margins: rootWidth*0.02
-            text:qsTr(jottingInfo.content)
-            clip :true
-            font.pixelSize: 22
-            color: "black"
-            wrapMode: Text.WrapAnywhere
-            elide: Text.ElideRight
-            maximumLineCount:2
+            width: rootWidth*0.95
+            height:rootWidth*0.3
+            Text{
+                anchors.fill: parent
+                verticalAlignment: TextInput.AlignVCenter
+    //            horizontalAlignment: TextInput.AlignHCenter
+                text:jottingInfo.content
+                font.pixelSize: 12
+                wrapMode: Text.WordWrap
+                clip:true
+                font.bold: true
+            }
         }
+
+
+//        Text{
+//            id:content
+//            width: rootWidth*0.9
+//            anchors.top: indicator.bottom
+//            anchors.left: parent.left
+//            anchors.margins: rootWidth*0.02
+//            text:qsTr(jottingInfo.content)
+//            clip :true
+//            font.pixelSize: 22
+//            color: "black"
+//            wrapMode: Text.WrapAnywhere
+//            elide: Text.ElideRight
+//            maximumLineCount:2
+//        }
 
         Text{
             id:time

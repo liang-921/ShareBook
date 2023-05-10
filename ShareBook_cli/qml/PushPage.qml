@@ -478,7 +478,8 @@ Item {
                         pushJottings.receiveOneJotting(jottings[index].id)
 
                         jotting_detail=JSON.parse(pushJottings.jotting)
-                        loader.setSource(jotDetailPage_loader,{"type":"push","jottingInfo":jotting_detail})
+                        loader.setSource(jottings[index].file,{"type":"push","jottingInfo":jotting_detail})
+//                        loader.setSource(jotDetailPage_loader,{"type":"push","jottingInfo":jotting_detail})
 
                         console.log("===============================网民昵称："+netizen.nikeName)
 
